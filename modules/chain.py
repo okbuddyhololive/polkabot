@@ -27,6 +27,7 @@ class MessageManager:
         with open(path, "w") as file:
             self.to_file(file)
 
+    # methods that will be used by other functions & should not be used by the "consumer"
     async def _default(self) -> List[str]:
         dataset = [message for pack in self.messages.values() for message in pack] # flattening
 
@@ -35,6 +36,7 @@ class MessageManager:
 
         return dataset
     
+    # methods for interacting with a specific message dataset in a list
     async def add(self, message: Message, author: Union[Member, User]):
         identificator = str(author.id)
         content = message.clean_content
