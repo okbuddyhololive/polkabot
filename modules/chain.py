@@ -1,12 +1,31 @@
 from discord import Message, Member, User
 import markovify
 
-from typing import Optional, Dict, List, Union
+from typing import Optional, Dict, List, Union, TextIO
+from __future__ import annotations
+import json
 
 class MessageManager:
     def __init__(self, messages: Dict[List[str]]):
         self.messages = messages
         self.max_limit = 25_000 # TODO: make this a customizable variable in the config
+
+    # methods for loading & dumping webhooks
+    @staticmethod
+    def from_file(file: TextIO) -> MessageManager:
+        return MessageManager(json.load(file))
+
+    @staticmethod
+    def from_path(path: str) -> MessageManager:
+        with open(path, "r") as file:
+            return MessageManager.from_file(file)
+    
+    def to_file(self, file: TextIO):
+        json.dump(self.webhooks, file, indent=4)
+    
+    def to_path(self, path: str):
+        with open(path, "w") as file:
+            self.to_file(file)
 
     async def _default(self) -> List[str]:
         dataset = [message for pack in self.messages.values() for message in pack] # flattening
