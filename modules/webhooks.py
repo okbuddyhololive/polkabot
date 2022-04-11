@@ -26,12 +26,12 @@ class WebhookManager:
         with open(path, "r") as file:
             return WebhookManager.from_file(file)
     
-    def to_file(self, file: TextIO):
-        json.dump(self.webhooks, file, indent=4)
+    def to_file(self, file: TextIO, indent: int = 4):
+        json.dump(self.webhooks, file, indent=indent)
     
-    def to_path(self, path: str):
+    def to_path(self, path: str, indent: int = 4):
         with open(path, "w") as file:
-            self.to_file(file)
+            self.to_file(file, indent=indent)
     
     # methods that will be used by other functions & should not be used by the "consumer"
     def _find(self, channel: TextChannel) -> dict:
