@@ -1,7 +1,7 @@
+from __future__ import annotations
 from discord import Webhook, AsyncWebhookAdapter, TextChannel
 
 from typing import List, Optional, TextIO
-from __future__ import annotations
 import json
 
 def webhook_to_dict(webhook: Webhook) -> dict:
@@ -44,9 +44,9 @@ class WebhookManager:
         webhook = self._find(channel)
 
         if webhook is None:
-            return
+            return await self.create(channel)
         
-        return Webhook(webhook, adapter)
+        return Webhook(webhook, adapter=adapter)
 
     async def create(self, channel: TextChannel) -> Webhook:
         webhook = await channel.create_webhook(name=f"#{channel.name} Impersonation Webhook")

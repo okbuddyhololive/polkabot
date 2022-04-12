@@ -1,8 +1,8 @@
+from __future__ import annotations
 from discord import Message, Member, User
 import markovify
 
 from typing import Optional, Dict, List, Union, TextIO
-from __future__ import annotations
 import json
 
 class MessageManager:
@@ -37,8 +37,8 @@ class MessageManager:
         return dataset
     
     # methods for interacting with a specific message dataset in a list
-    async def add(self, message: Message, author: Union[Member, User]):
-        identificator = str(author.id)
+    async def add(self, message: Message):
+        identificator = str(message.author.id)
         content = message.clean_content
 
         if identificator not in self.messages:
