@@ -6,5 +6,6 @@ bot = commands.Bot(command_prefix="$") # TODO: make the prefix customizable in t
 # loading cogs
 bot.load_extension("cogs.impersonation")
 bot.load_extension("cogs.events")
+bot.load_extension("jishaku")
 
 bot.run(os.getenv("DISCORD_TOKEN"))
