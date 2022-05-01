@@ -4,6 +4,7 @@ import markovify
 
 from typing import Optional, Dict, List, Union, TextIO
 import json
+import os
 
 class MessageManager:
     def __init__(self, messages: Dict[List[str]]):
@@ -17,8 +18,10 @@ class MessageManager:
 
     @staticmethod
     def from_path(path: str) -> MessageManager:
-        with open(path, "r") as file:
-            return MessageManager.from_file(file)
+        if not os.path.exists("PROJECT-PRETENDER/data/messages.json"):
+            with open("messages.json", "a") as file:
+                with open(path, "r") as file:
+                    return MessageManager.from_file(file)
     
     def to_file(self, file: TextIO, indent: int = 4):
         json.dump(self.messages, file, indent=indent)

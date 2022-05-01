@@ -3,6 +3,7 @@ from discord import Webhook, AsyncWebhookAdapter, TextChannel
 
 from typing import List, Optional, TextIO
 import json
+import os
 
 def webhook_to_dict(webhook: Webhook) -> dict:
     return {
@@ -23,8 +24,10 @@ class WebhookManager:
 
     @staticmethod
     def from_path(path: str) -> WebhookManager:
-        with open(path, "r") as file:
-            return WebhookManager.from_file(file)
+        if not os.path.exists("PROJECT-PRETENDER/data/webhooks.json"):
+            with open("webhooks.json", "a") as file:
+                with open(path, "r") as file:
+                    return WebhookManager.from_file(file)
     
     def to_file(self, file: TextIO, indent: int = 4):
         json.dump(self.webhooks, file, indent=indent)
