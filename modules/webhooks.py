@@ -26,9 +26,9 @@ class WebhookManager:
     def from_path(path: str) -> WebhookManager:
         if not os.path.exists(path):
             with open(path, "w") as file:
-                file.write("[]")
-                with open(path, "r") as file:
-                    return WebhookManager.from_file(file)
+                file.write("[]")      
+        with open(path, "r") as file:
+            return WebhookManager.from_file(file)
     
     def to_file(self, file: TextIO, indent: int = 4):
         json.dump(self.webhooks, file, indent=indent)

@@ -21,8 +21,8 @@ class MessageManager:
         if not os.path.exists(path):
             with open(path, "w") as file:
                 file.write("{}")
-                with open(path, "r") as file:
-                    return MessageManager.from_file(file)
+        with open(path, "r") as file:
+            return MessageManager.from_file(file)
     
     def to_file(self, file: TextIO, indent: int = 4):
         json.dump(self.messages, file, indent=indent)
