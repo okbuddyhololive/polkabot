@@ -18,8 +18,9 @@ class MessageManager:
 
     @staticmethod
     def from_path(path: str) -> MessageManager:
-        if not os.path.exists("PROJECT-PRETENDER/data/messages.json"):
-            with open("messages.json", "a") as file:
+        if not os.path.exists("/data/messages.json"):
+            with open(path, "a") as file:
+                json.dump({}, file)
                 with open(path, "r") as file:
                     return MessageManager.from_file(file)
     
