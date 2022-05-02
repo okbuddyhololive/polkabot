@@ -24,9 +24,9 @@ class WebhookManager:
 
     @staticmethod
     def from_path(path: str) -> WebhookManager:
-        if not os.path.exists("/data/webhooks.json"):
-            with open(path, "a") as file:
-                json.dump([], file)
+        if not os.path.exists(path):
+            with open(path, "w") as file:
+                file.write("[]")
                 with open(path, "r") as file:
                     return WebhookManager.from_file(file)
     
