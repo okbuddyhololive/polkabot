@@ -9,7 +9,7 @@ import os
 class MessageManager:
     def __init__(self, messages: Dict[List[str]]):
         self.messages = messages
-        self.max_limit = 25_000 # TODO: make this a customizable variable in the config
+        self.max_limit = self.bot.config["Chain"]["max_limit"]
 
     # methods for loading & dumping webhooks
     @staticmethod
@@ -21,6 +21,7 @@ class MessageManager:
         if not os.path.exists(path):
             with open(path, "w") as file:
                 file.write("{}")
+
         with open(path, "r") as file:
             return MessageManager.from_file(file)
     
@@ -63,4 +64,4 @@ class MessageManager:
 
         chain = markovify.NewlineText(dataset, well_formed=False)
 
-        return chain.make_short_sentence(200) # TODO: make the length (200) a customizable variable in the config too 
+        return chain.make_short_sentence(self.bot.config["Chain"]["length"])

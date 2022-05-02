@@ -26,7 +26,8 @@ class WebhookManager:
     def from_path(path: str) -> WebhookManager:
         if not os.path.exists(path):
             with open(path, "w") as file:
-                file.write("[]")      
+                file.write("[]")    
+          
         with open(path, "r") as file:
             return WebhookManager.from_file(file)
     
