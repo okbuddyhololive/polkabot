@@ -55,6 +55,9 @@ class MessageManager:
         if len(self.messages[identificator]) > self.max_limit:
             self.messages[identificator] = self.messages[identificator][1:] # strip out the oldest message in the list
 
+    async def remove(self, author: Union[Member, User]) -> List[str]:
+        return self.messages.pop(str(author.id), [])
+
     async def generate(self, author: Union[Member, User]) -> str:
         identificator = str(author.id)
 
