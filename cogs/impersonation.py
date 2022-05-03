@@ -9,7 +9,11 @@ class Impersonation(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-        self.messages = MessageManager.from_path("data/messages.json")
+        self.messages = MessageManager.from_path(
+            "data/messages.json", 
+            max_limit=self.bot.config["Chain"]["max_limit"],
+            length=self.bot.config["Chain"]["length"]
+        )
         self.webhooks = WebhookManager.from_path("data/webhooks.json")
 
         self.dump_webhooks.start()
@@ -29,7 +33,10 @@ class Impersonation(commands.Cog):
     async def on_message(self, message: Message):
         if message.author == self.bot.user:
             return
-
+        
+        if message.webhook_id is not None:
+            return
+        
         # TODO: add some if-checks here if we do "opt in/out" stuff
         await self.messages.add(message)
     

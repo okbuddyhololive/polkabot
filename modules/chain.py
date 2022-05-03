@@ -7,23 +7,24 @@ import json
 import os
 
 class MessageManager:
-    def __init__(self, messages: Dict[List[str]]):
+    def __init__(self, messages: Dict[List[str]], max_limit: int, length: int):
         self.messages = messages
-        self.max_limit = self.bot.config["Chain"]["max_limit"]
+        self.max_limit = max_limit
+        self.length = length
 
     # methods for loading & dumping webhooks
     @staticmethod
-    def from_file(file: TextIO) -> MessageManager:
-        return MessageManager(json.load(file))
+    def from_file(file: TextIO, max_limit: int, length: int) -> MessageManager:
+        return MessageManager(json.load(file), max_limit, length)
 
     @staticmethod
-    def from_path(path: str) -> MessageManager:
+    def from_path(path: str, max_limit: int, length: int) -> MessageManager:
         if not os.path.exists(path):
             with open(path, "w") as file:
                 file.write("{}")
 
         with open(path, "r") as file:
-            return MessageManager.from_file(file)
+            return MessageManager.from_file(file, max_limit, length)
     
     def to_file(self, file: TextIO, indent: int = 4):
         json.dump(self.messages, file, indent=indent)
@@ -64,4 +65,4 @@ class MessageManager:
 
         chain = markovify.NewlineText(dataset, well_formed=False)
 
-        return chain.make_short_sentence(self.bot.config["Chain"]["length"])
+        return chain.make_short_sentence(self.length)
