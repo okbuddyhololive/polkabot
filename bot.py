@@ -5,6 +5,9 @@ import toml
 import logging
 import os
 
+from modules.webhooks import WebhookManager
+from modules.chain import MessageManager
+
 logger = logging.basicConfig(
     level=logging.INFO,
     format="(%(asctime)s) [%(levelname)s] %(message)s",
@@ -20,7 +23,15 @@ with open("config.toml") as file:
     config = toml.load(file)
 
 bot = commands.Bot(command_prefix=config["prefix"], intents=Intents.default())
-bot.config = config # for global cog access
+
+# for global cog access
+bot.config = config
+bot.messages = MessageManager.from_path(
+    "data/messages.json", 
+    max_limit=bot.config["Chain"]["max_limit"],
+    length=bot.config["Chain"]["length"]
+)
+bot.webhooks = WebhookManager.from_path("data/webhooks.json")
 
 # loading cogs
 bot.load_extension("cogs.impersonation")

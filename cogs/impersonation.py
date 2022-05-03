@@ -2,19 +2,12 @@ from discord.ext import commands, tasks
 from discord import Message, AsyncWebhookAdapter
 import aiohttp
 
-from modules.webhooks import WebhookManager
-from modules.chain import MessageManager
-
 class Impersonation(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-        self.messages = MessageManager.from_path(
-            "data/messages.json", 
-            max_limit=self.bot.config["Chain"]["max_limit"],
-            length=self.bot.config["Chain"]["length"]
-        )
-        self.webhooks = WebhookManager.from_path("data/webhooks.json")
+        self.messages = self.bot.messages
+        self.webhooks = self.bot.webhooks
 
         self.dump_webhooks.start()
         self.dump_messages.start()
