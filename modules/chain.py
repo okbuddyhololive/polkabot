@@ -7,11 +7,13 @@ import json
 import os
 
 class MessageManager:
-    def __init__(self, messages: Dict[List[str]], max_limit: int, length: int):
+    def __init__(self, messages: Dict[List[str]], max_limit: int = 25_000, length: int = 200, tries: int = 100):
         self.messages = messages
+
         self.max_limit = max_limit
         self.length = length
-
+        self.tries = tries
+    
     # methods for loading & dumping webhooks
     @staticmethod
     def from_file(file: TextIO, max_limit: int, length: int) -> MessageManager:
@@ -68,4 +70,4 @@ class MessageManager:
 
         chain = markovify.NewlineText(dataset, well_formed=False)
 
-        return chain.make_short_sentence(self.length)
+        return chain.make_short_sentence(self.length, tries=self.tries)

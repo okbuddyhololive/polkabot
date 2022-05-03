@@ -16,11 +16,13 @@ class Impersonation(commands.Cog):
         self.dump_data.start()
     
     def _load_blacklist(self):
-        if not os.path.exists("data/blacklist.json"):
-            with open("data/blacklist.json", "w") as file:
+        path = "data/blacklist.json"
+
+        if not os.path.exists(path):
+            with open(path, "w") as file:
                 file.write("[]")
         
-        with open("data/blacklist.json", "r") as file:
+        with open(path, "r") as file:
             return json.load(file)
     
     # tasks for dumping message & webhook data, in case of a bot shutdown

@@ -27,9 +27,11 @@ bot = commands.Bot(command_prefix=config["prefix"], intents=Intents.default())
 # for global cog access
 bot.config = config
 bot.messages = MessageManager.from_path(
-    "data/messages.json", 
+    "data/messages.json",
+
     max_limit=bot.config["Chain"]["max_limit"],
-    length=bot.config["Chain"]["length"]
+    length=bot.config["Chain"]["length"],
+    tries=bot.config["Chain"]["tries"]
 )
 bot.webhooks = WebhookManager.from_path("data/webhooks.json")
 
