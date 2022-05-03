@@ -3,6 +3,7 @@ from discord import Message, AsyncWebhookAdapter
 import aiohttp
 
 import json
+import os
 
 class Impersonation(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -15,6 +16,10 @@ class Impersonation(commands.Cog):
         self.dump_data.start()
     
     def _load_blacklist(self):
+        if not os.path.exists("data/blacklist.json"):
+            with open("data/blacklist.json", "w") as file:
+                file.write("[]")
+        
         with open("data/blacklist.json", "r") as file:
             return json.load(file)
     
@@ -25,7 +30,7 @@ class Impersonation(commands.Cog):
         self.webhooks.to_path("data/webhooks.json")
 
         with open("data/blacklist.json", "w") as file:
-            json.dump(self.blacklist, file, indent=4)
+            json.dump(self.blacklist, file)
 
     # events for interacting with webhook/message data
     @commands.Cog.listener()
