@@ -22,7 +22,9 @@ logger = logging.basicConfig(
 with open("config.toml") as file:
     config = toml.load(file)
 
-bot = commands.Bot(command_prefix=config["prefix"], intents=Intents.default())
+intents = Intents.default()
+intents.members = True # needed for $count
+bot = commands.Bot(command_prefix=config["prefix"], intents=intents)
 
 # for global cog access
 bot.config = config
@@ -37,7 +39,9 @@ bot.webhooks = WebhookManager.from_path("data/webhooks.json")
 
 # loading cogs
 bot.load_extension("cogs.impersonation")
+bot.load_extension("cogs.counting")
 bot.load_extension("cogs.events")
+
 bot.load_extension("jishaku")
 
 bot.run(os.getenv("DISCORD_TOKEN"))

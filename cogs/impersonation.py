@@ -47,7 +47,7 @@ class Impersonation(commands.Cog):
     
     # actual commands here
     @commands.command()
-    async def impersonate(self, ctx):
+    async def impersonate(self, ctx: commands.Context):
         session = aiohttp.ClientSession()
 
         message = await self.messages.generate(ctx.author)
@@ -59,7 +59,7 @@ class Impersonation(commands.Cog):
     
     # opt in/out commands
     @commands.command()
-    async def optin(self, ctx):
+    async def optin(self, ctx: commands.Context):
         if ctx.author.id not in self.blacklist:
             return await ctx.message.reply("You're already opted in!", mention_author=False)
         
@@ -67,7 +67,7 @@ class Impersonation(commands.Cog):
         await ctx.message.reply("You're now opted in!", mention_author=False)
 
     @commands.command()
-    async def optout(self, ctx):
+    async def optout(self, ctx: commands.Context):
         if ctx.author.id in self.blacklist:
             return await ctx.message.reply("You're already opted out!", mention_author=False)
         
