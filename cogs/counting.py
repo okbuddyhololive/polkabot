@@ -1,5 +1,6 @@
 from discord.ext import commands
 from discord import Embed, Colour
+from datetime import datetime
 
 class Counting(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -23,9 +24,13 @@ class Counting(commands.Cog):
                 occurences[author] += 1
 
         embed = Embed(
-            title=f"Top #10 users who've typed '{text}':", 
-            colour=Colour.orange()
+            title=f"Top 10 users who've typed '{text}':", 
+            #description="(based on message data collected here thus far)",
+            colour=Colour.blurple(),
+            timestamp=datetime.utcnow()
         )
+
+        embed.set_footer(text=f"Invoked by {ctx.author}", icon_url=ctx.author.avatar_url)
 
         for index, (id, count) in enumerate(occurences.items()):
             user = self.bot.get_user(int(id))
