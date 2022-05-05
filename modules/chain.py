@@ -16,17 +16,17 @@ class MessageManager:
     
     # methods for loading & dumping webhooks
     @staticmethod
-    def from_file(file: TextIO, max_limit: int, length: int) -> MessageManager:
-        return MessageManager(json.load(file), max_limit, length)
+    def from_file(file: TextIO, max_limit: int, length: int, tries: int) -> MessageManager:
+        return MessageManager(json.load(file), max_limit, length, tries)
 
     @staticmethod
-    def from_path(path: str, max_limit: int, length: int) -> MessageManager:
+    def from_path(path: str, max_limit: int, length: int, tries: int) -> MessageManager:
         if not os.path.exists(path):
             with open(path, "w") as file:
                 file.write("{}")
 
         with open(path, "r") as file:
-            return MessageManager.from_file(file, max_limit, length)
+            return MessageManager.from_file(file, max_limit, length, tries)
     
     def to_file(self, file: TextIO, indent: int = 4):
         json.dump(self.messages, file, indent=indent)
