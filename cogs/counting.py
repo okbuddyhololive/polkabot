@@ -16,11 +16,15 @@ class Counting(commands.Cog):
         for author, pack in messages.items():
             for message in pack:
                 message = message.lower()
+                amount = message.count(text)
 
+                if not amount:
+                    continue
+                
                 if author not in occurences:
                     occurences[author] = 0
                 
-                occurences[author] += message.count(text)
+                occurences[author] += amount
 
         embed = Embed(
             title=f"Top 10 users who've typed '{text}':", 
