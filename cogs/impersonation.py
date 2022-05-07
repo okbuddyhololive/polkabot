@@ -21,9 +21,10 @@ class Impersonation(commands.Cog):
     async def on_message(self, message: Message):
         if message.author.bot:
             return
- 
-        #if message.author.id in self.blacklist:
-        #    return
+
+        entry = await self.blacklist.find_one({"user": {"id": message.author.id}})
+        if entry:
+            return
         
         await self.messages.add(message)
     
