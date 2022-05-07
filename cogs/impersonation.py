@@ -27,7 +27,7 @@ class Impersonation(commands.Cog):
             return json.load(file)
     
     # tasks for dumping message & webhook data, in case of a bot shutdown
-    @tasks.loop(seconds=60)
+    @tasks.loop(seconds=5)
     async def dump_data(self):
         self.messages.to_path("data/messages.json")
         self.webhooks.to_path("data/webhooks.json")
