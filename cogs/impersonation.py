@@ -1,48 +1,26 @@
-from discord.ext import commands, tasks
 from discord import Message, User, AsyncWebhookAdapter
+from discord.ext import commands
 import aiohttp
 
 from typing import Optional
-import json
-import os
+
+from modules.chain import MessageManager
+from modules.webhooks import WebhookManager
 
 class Impersonation(commands.Cog):
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: commands.Bot, messages: MessageManager, webhooks: WebhookManager):
         self.bot = bot
-
-        self.messages = self.bot.messages
-        self.webhooks = self.bot.webhooks
-        self.blacklist = self._load_blacklist()
-
-        self.dump_data.start()
+        self.messages = messages
+        self.webhooks = webhooks
     
-    def _load_blacklist(self):
-        path = "data/blacklist.json"
-
-        if not os.path.exists(path):
-            with open(path, "w") as file:
-                file.write("[]")
-        
-        with open(path, "r") as file:
-            return json.load(file)
-    
-    # tasks for dumping message & webhook data, in case of a bot shutdown
-    @tasks.loop(seconds=5)
-    async def dump_data(self):
-        self.messages.to_path("data/messages.json")
-        self.webhooks.to_path("data/webhooks.json")
-
-        with open("data/blacklist.json", "w") as file:
-            json.dump(self.blacklist, file)
-
     # events for interacting with webhook/message data
     @commands.Cog.listener()
     async def on_message(self, message: Message):
         if message.author.bot:
             return
  
-        if message.author.id in self.blacklist:
-            return
+        #if message.author.id in self.blacklist:
+        #    return
         
         await self.messages.add(message)
     
@@ -59,6 +37,7 @@ class Impersonation(commands.Cog):
         await webhook.send(message, username=ctx.author.name, avatar_url=ctx.author.avatar_url)
         await session.close()
     
+    """
     # opt in/out commands
     @commands.command()
     async def optin(self, ctx: commands.Context):
@@ -88,6 +67,11 @@ class Impersonation(commands.Cog):
         self.blacklist.append(ctx.author.id)
 
         await message.edit(content="Successfully deleted all message data from you and added you to the log blacklist!", mention_author=False)
+    """
 
 def setup(bot: commands.Bot):
-    bot.add_cog(Impersonation(bot))
+    bot.add_cog(Impersonation(
+        bot=bot, 
+        messages=MessageManager(bot.database, **bot.config["Chain"]), 
+        webhooks=WebhookManager(bot.database)
+    ))

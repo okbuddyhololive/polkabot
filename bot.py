@@ -1,12 +1,10 @@
 from discord.ext import commands
 from discord import Intents
+import motor.motor_asyncio as motor
 import toml
 
 import logging
 import os
-
-from modules.webhooks import WebhookManager
-from modules.chain import MessageManager
 
 logger = logging.basicConfig(
     level=logging.INFO,
@@ -24,12 +22,13 @@ with open("config.toml") as file:
 
 intents = Intents.default()
 intents.members = True # needed for $count
-bot = commands.Bot(command_prefix=config["prefix"], intents=intents)
 
-# for global cog access
-bot.config = config
-bot.messages = MessageManager.from_path("data/messages.json", **bot.config["Chain"])
-bot.webhooks = WebhookManager.from_path("data/webhooks.json")
+bot = commands.Bot(command_prefix=config["prefix"], intents=intents)
+bot.config = config # for global cog access
+
+# database thingies
+client = motor.AsyncIOMotorClient(bot.config["Database"]["connection_uri"])
+bot.database = client[bot.config["Database"]["database_name"]]
 
 # loading cogs
 bot.load_extension("cogs.impersonation")

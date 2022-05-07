@@ -128,9 +128,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Bot files
-data/messages.json
-data/webhooks.json
-data/blacklist.json
-
+# Bot logs
 discord.log
