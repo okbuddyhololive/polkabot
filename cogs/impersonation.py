@@ -1,7 +1,8 @@
 from discord.ext import commands, tasks
-from discord import Message, AsyncWebhookAdapter
+from discord import Message, User, AsyncWebhookAdapter
 import aiohttp
 
+from typing import Optional
 import json
 import os
 
@@ -47,10 +48,11 @@ class Impersonation(commands.Cog):
     
     # actual commands here
     @commands.command()
-    async def impersonate(self, ctx: commands.Context):
+    async def impersonate(self, ctx: commands.Context, victim: Optional[User]):
         session = aiohttp.ClientSession()
+        victim = victim or ctx.author
 
-        message = await self.messages.generate(ctx.author)
+        message = await self.messages.generate(victim)
         webhook = await self.webhooks.get(ctx.channel, AsyncWebhookAdapter(session))
 
         await ctx.message.delete()
