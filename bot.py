@@ -6,6 +6,8 @@ import toml
 import logging
 import os
 
+from modules.help import PretenderHelpCommand
+
 logger = logging.basicConfig(
     level=logging.INFO,
     format="(%(asctime)s) [%(levelname)s] %(message)s",
@@ -23,7 +25,7 @@ with open("config.toml") as file:
 intents = Intents.default()
 intents.members = True # needed for $count
 
-bot = commands.Bot(command_prefix=config["prefix"], intents=intents)
+bot = commands.Bot(command_prefix=config["prefix"], help_command=PretenderHelpCommand(), intents=intents)
 bot.config = config # for global cog access
 
 # database thingies
