@@ -44,7 +44,7 @@ class Impersonation(commands.Cog):
             return
         
         await self.messages.add(message)
-    
+    # adding this so i can be sure it saves the session lol
     # actual commands here
     @commands.command()
     async def impersonate(self, ctx: commands.Context):
