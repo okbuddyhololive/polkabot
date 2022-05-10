@@ -1,67 +1,35 @@
 from __future__ import annotations
 from discord import Webhook, AsyncWebhookAdapter, TextChannel
+from motor.motor_asyncio import AsyncIOMotorDatabase
 
-from typing import List, Optional, TextIO
-import json
-import os
-
-def webhook_to_dict(webhook: Webhook) -> dict:
-    return {
-        "type": 1,
-        "id": webhook.id,
-        "token": webhook.token,
-        "channel_id": webhook.channel_id
-    }
-    
 class WebhookManager:
-    def __init__(self, webhooks: List[dict]):
-        self.webhooks = webhooks
+    def __init__(self, database: AsyncIOMotorDatabase):
+        self.collection = database.webhooks
 
-    # methods for loading & dumping webhooks
-    @staticmethod
-    def from_file(file: TextIO) -> WebhookManager:
-        return WebhookManager(json.load(file))
-
-    @staticmethod
-    def from_path(path: str) -> WebhookManager:
-        if not os.path.exists(path):
-            with open(path, "w") as file:
-                file.write("[]")    
-          
-        with open(path, "r") as file:
-            return WebhookManager.from_file(file)
-    
-    def to_file(self, file: TextIO, indent: int = 4):
-        json.dump(self.webhooks, file, indent=indent)
-    
-    def to_path(self, path: str, indent: int = 4):
-        with open(path, "w") as file:
-            self.to_file(file, indent=indent)
-    
-    # methods that will be used by other functions & should not be used by the "consumer"
-    def _find(self, channel: TextChannel) -> dict:
-        for webhook in self.webhooks:
-            if webhook["channel_id"] == channel.id:
-                return webhook
-    
-    # methods for interacting with a specific webhook in a list
-    async def get(self, channel: TextChannel, adapter: AsyncWebhookAdapter) -> Optional[Webhook]:
-        webhook = self._find(channel)
+    # methods for interacting with a specific webhook in a collection
+    async def get(self, channel: TextChannel, adapter: AsyncWebhookAdapter) -> Webhook:
+        webhook = await self.collection.find_one({"channel": {"id": channel.id}})
 
         if webhook is None:
             return await self.create(channel)
+        
+        # stuff so that the webhook class will work 
+        webhook.remove("_id")
+        webhook.remove("channel")
+        webhook["type"] = 1
         
         return Webhook(webhook, adapter=adapter)
 
     async def create(self, channel: TextChannel) -> Webhook:
         webhook = await channel.create_webhook(name=f"#{channel.name} Impersonation Webhook")
-        self.webhooks.append(webhook_to_dict(webhook))
+        
+        await self.collection.insert_one({
+            "id": webhook.id,
+            "token": webhook.token,
+            "channel": {"id": channel.id, "name": channel.name},
+        })
+
         return webhook
 
     async def remove(self, channel: TextChannel):
-        webhook = self._find(channel)
-
-        if webhook is None:
-            return # TODO: raise a KeyError & then handle it in the command
-
-        self.webhooks.remove(webhook)
+        return await self.collection.delete_one({"channel": {"id": channel.id}})

@@ -1,56 +1,40 @@
-from discord.ext import commands, tasks
-from discord import Message, AsyncWebhookAdapter
+from discord import Message, User, AsyncWebhookAdapter
+from discord.ext import commands
+from motor.motor_asyncio import AsyncIOMotorCollection
 import aiohttp
 
-import json
-import os
+from typing import Optional
+
+from modules.chain import MessageManager
+from modules.webhooks import WebhookManager
 
 class Impersonation(commands.Cog):
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: commands.Bot, messages: MessageManager, webhooks: WebhookManager, blacklist: AsyncIOMotorCollection):
         self.bot = bot
 
-        self.messages = self.bot.messages
-        self.webhooks = self.bot.webhooks
-        self.blacklist = self._load_blacklist()
-
-        self.dump_data.start()
+        self.messages = messages
+        self.webhooks = webhooks
+        self.blacklist = blacklist
     
-    def _load_blacklist(self):
-        path = "data/blacklist.json"
-
-        if not os.path.exists(path):
-            with open(path, "w") as file:
-                file.write("[]")
-        
-        with open(path, "r") as file:
-            return json.load(file)
-    
-    # tasks for dumping message & webhook data, in case of a bot shutdown
-    @tasks.loop(seconds=60)
-    async def dump_data(self):
-        self.messages.to_path("data/messages.json")
-        self.webhooks.to_path("data/webhooks.json")
-
-        with open("data/blacklist.json", "w") as file:
-            json.dump(self.blacklist, file)
-
     # events for interacting with webhook/message data
     @commands.Cog.listener()
     async def on_message(self, message: Message):
         if message.author.bot:
             return
- 
-        if message.author.id in self.blacklist:
+
+        entry = await self.blacklist.find_one({"user": {"id": message.author.id}})
+        if entry:
             return
         
         await self.messages.add(message)
     # adding this so i can be sure it saves the session lol
     # actual commands here
     @commands.command()
-    async def impersonate(self, ctx: commands.Context):
+    async def impersonate(self, ctx: commands.Context, victim: Optional[User]):
         session = aiohttp.ClientSession()
+        victim = victim or ctx.author
 
-        message = await self.messages.generate(ctx.author)
+        message = await self.messages.generate(victim)
         webhook = await self.webhooks.get(ctx.channel, AsyncWebhookAdapter(session))
 
         await ctx.message.delete()
@@ -60,15 +44,18 @@ class Impersonation(commands.Cog):
     # opt in/out commands
     @commands.command()
     async def optin(self, ctx: commands.Context):
-        if ctx.author.id not in self.blacklist:
+        entry = await self.blacklist.find_one({"user": {"id": ctx.author.id}})
+
+        if not entry:
             return await ctx.message.reply("You're already opted in!", mention_author=False)
         
-        self.blacklist.remove(ctx.author.id)
+        await self.blacklist.delete_one(entry)
         await ctx.message.reply("You're now opted in!", mention_author=False)
 
     @commands.command()
     async def optout(self, ctx: commands.Context):
-        if ctx.author.id in self.blacklist:
+        entry = await self.blacklist.find_one({"user": {"id": ctx.author.id}})
+        if entry:
             return await ctx.message.reply("You're already opted out!", mention_author=False)
         
         def check(reaction, user):
@@ -83,9 +70,15 @@ class Impersonation(commands.Cog):
             return await message.edit(content="Didn't get a reaction in time, so you're still opted in.")
         
         await self.messages.remove(ctx.author)
-        self.blacklist.append(ctx.author.id)
+        await self.blacklist.insert_one({"user": {"id": ctx.author.id}})
 
         await message.edit(content="Successfully deleted all message data from you and added you to the log blacklist!", mention_author=False)
 
 def setup(bot: commands.Bot):
-    bot.add_cog(Impersonation(bot))
+    bot.add_cog(Impersonation(
+        bot=bot,
+
+        messages=MessageManager(bot.database, **bot.config["Chain"]), 
+        webhooks=WebhookManager(bot.database),
+        blacklist=bot.database.blacklist
+    ))

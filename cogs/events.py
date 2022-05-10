@@ -1,10 +1,11 @@
 from discord.ext import commands
+import traceback
 import logging
 
 class Events(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-
+    
     @commands.Cog.listener()
     async def on_ready(self):
         logging.info(f"Logged in as {self.bot.user}!")
@@ -14,6 +15,15 @@ class Events(commands.Cog):
         if isinstance(error, commands.CommandNotFound):
             return
 
+        exception = traceback.format_exception(type(error), error, error.__traceback__)
+
+        message = (
+            "Uh oh, I've ran into an issue while trying to execute this command!\n"
+            f"Please send the message below to the bot developers:\n"
+            f"```py\n{''.join(exception)}\n```"
+        )
+
+        await ctx.send(message)
         logging.warning(f"A user tried to use `${ctx.command}` but got an error: {error}")
 
 def setup(bot: commands.Bot):
