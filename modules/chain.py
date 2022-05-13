@@ -19,15 +19,15 @@ class MessageManager:
     
     async def add(self, message: Message):
         return await self.collection.insert_one({
-            "author": {"id": message.author.id},
+            "author": {"id": str(message.author.id)},
             "content": message.clean_content
         })
 
     async def remove(self, author: Union[Member, User]) -> List[str]:
-        return await self.collection.delete_many({"author": {"id": author.id}})
+        return await self.collection.delete_many({"author": {"id": str(author.id)}})
 
     async def generate(self, author: Union[Member, User]) -> str:
-        cursor = self.collection.find({"author": {"id": author.id}})
+        cursor = self.collection.find({"author": {"id": str(author.id)}})
         dataset = await cursor.to_list(length=self.max_limit)
 
         if not dataset:
