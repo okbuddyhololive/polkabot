@@ -8,7 +8,7 @@ class WebhookManager:
 
     # methods for interacting with a specific webhook in a collection
     async def get(self, channel: TextChannel, adapter: AsyncWebhookAdapter) -> Webhook:
-        webhook = await self.collection.find_one({"channel": {"id": channel.id}})
+        webhook = await self.collection.find_one({"channel": {"id": str(channel.id)}})
 
         if webhook is None:
             return await self.create(channel)
@@ -26,10 +26,10 @@ class WebhookManager:
         await self.collection.insert_one({
             "id": webhook.id,
             "token": webhook.token,
-            "channel": {"id": channel.id, "name": channel.name},
+            "channel": {"id": str(channel.id), "name": channel.name},
         })
 
         return webhook
 
     async def remove(self, channel: TextChannel):
-        return await self.collection.delete_one({"channel": {"id": channel.id}})
+        return await self.collection.delete_one({"channel": {"id": str(channel.id)}})
