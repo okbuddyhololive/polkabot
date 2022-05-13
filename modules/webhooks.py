@@ -24,7 +24,7 @@ class WebhookManager:
         webhook = await channel.create_webhook(name=f"#{channel.name} Impersonation Webhook")
         
         await self.collection.insert_one({
-            "id": webhook.id,
+            "id": str(webhook.id),
             "token": webhook.token,
             "channel": {"id": str(channel.id), "name": channel.name},
         })
