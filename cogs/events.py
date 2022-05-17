@@ -1,4 +1,7 @@
 from discord.ext import commands
+from discord import File
+
+from io import StringIO
 import traceback
 import logging
 
@@ -19,10 +22,12 @@ class Events(commands.Cog):
 
         message = (
             "Uh oh, I've ran into an issue while trying to execute this command!\n"
-            f"Please send the message below to the bot developers:\n"
-            f"```py\n{''.join(exception)}\n```"
+            "Please send the file below to the bot developers via DMs:\n"
         )
-
+        
+        stream = StringIO("".join(exception)})
+        file = File(stream, filename="error.log")
+        
         await ctx.send(message)
         logging.warning(f"A user tried to use `${ctx.command}` but got an error: {error}")
 
