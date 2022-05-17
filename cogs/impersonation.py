@@ -21,13 +21,16 @@ class Impersonation(commands.Cog):
     async def on_message(self, message: Message):
         if message.author.bot:
             return
-
+        
+        if message.channel.id in self.bot.config["blacklist"]:
+            return
+        
         entry = await self.blacklist.find_one({"user": {"id": message.author.id}})
         if entry:
             return
         
         await self.messages.add(message)
-    # adding this so i can be sure it saves the session lol
+    
     # actual commands here
     @commands.command()
     async def impersonate(self, ctx: commands.Context, victim: Optional[User]):
