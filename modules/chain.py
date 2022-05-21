@@ -1,4 +1,3 @@
-from __future__ import annotations
 from discord import Message, Member, User
 from motor.motor_asyncio import AsyncIOMotorDatabase
 import markovify
@@ -12,7 +11,7 @@ class MessageManager:
         self.min_limit = min_limit
         self.max_limit = max_limit
         self.length = length
-        
+
         self.tries = tries
     
     async def default(self) -> List[Dict]:
