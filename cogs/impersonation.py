@@ -35,7 +35,7 @@ class Impersonation(commands.Cog):
     
     # actual commands here
     @commands.command()
-    async def impersonate(self, ctx: commands.Context, victim: Optional[User]):
+    async def impersonate(self, ctx: commands.Context, victim: Optional[User] = None):
         """
         Impersonates the invoker (or the person you specify), based on their messages that were collected.
         If the user has opted out of message collecting, it will be based on all messages in the database.
@@ -81,6 +81,7 @@ class Impersonation(commands.Cog):
         **Arguments:**
         None.
         """
+
         document = {"user": {"id": ctx.author.id}}
 
         if self.blacklist.count_documents(document):
