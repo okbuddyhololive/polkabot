@@ -10,6 +10,13 @@ class Counting(commands.Cog):
 
     @commands.command()
     async def count(self, ctx: commands.Context, *, keyword: str):
+        """
+        Counts the amount of messages containing a keyword and shows the Top #10 people who said it.
+
+        **Arguments:**
+        - `keyword`: The keyword to search for.
+        """
+
         keyword = keyword.lower()
         occurences = {}
         messages = await self.messages.default()

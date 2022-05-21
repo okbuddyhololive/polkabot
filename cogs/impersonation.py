@@ -36,6 +36,14 @@ class Impersonation(commands.Cog):
     # actual commands here
     @commands.command()
     async def impersonate(self, ctx: commands.Context, victim: Optional[User]):
+        """
+        Impersonates the invoker (or the person you specify), based on their messages that were collected.
+        If the user has opted out of message collecting, it will be based on all messages in the database.
+
+        **Arguments:**
+        - `victim`: The user to impersonate, is optional.
+        """
+
         session = aiohttp.ClientSession()
         victim = victim or ctx.author
 
@@ -49,6 +57,13 @@ class Impersonation(commands.Cog):
     # opt in/out commands
     @commands.command()
     async def optin(self, ctx: commands.Context):
+        """
+        Opts into the message collection process, if the user is in the black list.
+
+        **Arguments:**
+        None.
+        """
+
         document = {"user": {"id": ctx.author.id}}
 
         if not self.blacklist.count_documents(document):
@@ -59,6 +74,13 @@ class Impersonation(commands.Cog):
 
     @commands.command()
     async def optout(self, ctx: commands.Context):
+        """
+        Opts out of the message collection process, if the user is not in the black list.
+        Will ask for confirmation, in a form of a reaction to the bot message.
+
+        **Arguments:**
+        None.
+        """
         document = {"user": {"id": ctx.author.id}}
 
         if self.blacklist.count_documents(document):
