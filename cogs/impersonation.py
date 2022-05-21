@@ -22,6 +22,9 @@ class Impersonation(commands.Cog):
         if message.author.bot:
             return
         
+        if not message.clean_content:
+            return
+        
         if message.channel.id in self.bot.config["blacklist"]:
             return
         
@@ -46,18 +49,19 @@ class Impersonation(commands.Cog):
     # opt in/out commands
     @commands.command()
     async def optin(self, ctx: commands.Context):
-        entry = await self.blacklist.find_one({"user": {"id": ctx.author.id}})
+        document = {"user": {"id": ctx.author.id}}
 
-        if not entry:
+        if not self.blacklist.count_documents(document):
             return await ctx.message.reply("You're already opted in!", mention_author=False)
         
-        await self.blacklist.delete_one(entry)
+        await self.blacklist.delete_one(document)
         await ctx.message.reply("You're now opted in!", mention_author=False)
 
     @commands.command()
     async def optout(self, ctx: commands.Context):
-        entry = await self.blacklist.find_one({"user": {"id": ctx.author.id}})
-        if entry:
+        document = {"user": {"id": ctx.author.id}}
+
+        if self.blacklist.count_documents(document):
             return await ctx.message.reply("You're already opted out!", mention_author=False)
         
         def check(reaction, user):
@@ -72,7 +76,7 @@ class Impersonation(commands.Cog):
             return await message.edit(content="Didn't get a reaction in time, so you're still opted in.")
         
         await self.messages.remove(ctx.author)
-        await self.blacklist.insert_one({"user": {"id": ctx.author.id}})
+        await self.blacklist.insert_one(document)
 
         await message.edit(content="Successfully deleted all message data from you and added you to the log blacklist!", mention_author=False)
 
