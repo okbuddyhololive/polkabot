@@ -1,6 +1,5 @@
 from discord.ext import commands
 from discord import Embed, Colour
-from datetime import datetime
 
 from modules.chain import MessageManager
 
@@ -16,7 +15,8 @@ class Counting(commands.Cog):
         messages = await self.messages.default()
 
         for message in messages:
-            text = message.get("content").lower()
+            text = message.get("content")
+            text = text.lower()
             author = message["author"]["id"]
 
             if keyword not in text:
@@ -31,7 +31,7 @@ class Counting(commands.Cog):
             title=f"Top 10 users who've typed '{keyword}':", 
             #description="(based on message data collected here thus far)",
             colour=Colour.blurple(),
-            timestamp=datetime.utcnow()
+            timestamp=ctx.message.created_at
         )
 
         embed.set_footer(text=f"Invoked by {ctx.author}", icon_url=ctx.author.avatar_url)
