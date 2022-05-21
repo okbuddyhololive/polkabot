@@ -25,10 +25,10 @@ class Events(commands.Cog):
             "Please send the file below to the bot developers via DMs:\n"
         )
         
-        stream = StringIO("".join(exception)})
+        stream = StringIO("".join(exception))
         file = File(stream, filename="error.log")
         
-        await ctx.send(message)
+        await ctx.send(message, file=file)
         logging.warning(f"A user tried to use `${ctx.command}` but got an error: {error}")
 
 def setup(bot: commands.Bot):
