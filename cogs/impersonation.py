@@ -25,8 +25,7 @@ class Impersonation(commands.Cog):
         if message.channel.id in self.bot.config["blacklist"]:
             return
         
-        entry = await self.blacklist.find_one({"user": {"id": message.author.id}})
-        if entry:
+        if self.blacklist.count_documents({"user": {"id": message.author.id}}):
             return
         
         await self.messages.add(message)
