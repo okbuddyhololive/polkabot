@@ -6,11 +6,13 @@ import markovify
 from typing import Dict, List, Union
 
 class MessageManager:
-    def __init__(self, database: AsyncIOMotorDatabase, max_limit: int = 25_000, length: int = 200, tries: int = 100):
+    def __init__(self, database: AsyncIOMotorDatabase, min_limit: int = 1_000, max_limit: int = 25_000, length: int = 200, tries: int = 100):
         self.collection = database.messages
 
+        self.min_limit = min_limit
         self.max_limit = max_limit
         self.length = length
+        
         self.tries = tries
     
     async def default(self) -> List[Dict]:
@@ -30,7 +32,7 @@ class MessageManager:
         cursor = self.collection.find({"author": {"id": str(author.id)}})
         dataset = await cursor.to_list(length=self.max_limit)
 
-        if not dataset:
+        if not dataset or len(dataset) < self.min_limit:
             dataset = await self.default()
         
         dataset = [message.get("content") for message in dataset]
