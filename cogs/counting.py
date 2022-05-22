@@ -19,7 +19,9 @@ class Counting(commands.Cog):
 
         keyword = keyword.lower()
         occurences = {}
-        messages = await self.messages.containing(keyword)
+
+        async with ctx.typing():
+            messages = await self.messages.containing(keyword)
 
         for message in messages:
             text = message.get("content")
@@ -30,6 +32,9 @@ class Counting(commands.Cog):
                 occurences[author] = 0
                 
             occurences[author] += text.count(keyword)
+        
+        # sorting it by the most number of occurences
+        occurences = sorted(occurences.items(), key=lambda x: x[1], reverse=True)
 
         embed = Embed(
             title=f"Top 10 users who've typed '{keyword}':", 
@@ -47,6 +52,9 @@ class Counting(commands.Cog):
                 name=f"#{index + 1} - {str(user)}",
                 value=f"**{count}** uses",
             )
+
+            if index == 9: # 10th place
+                break
         
         await ctx.message.reply(embed=embed, mention_author=False)
 
