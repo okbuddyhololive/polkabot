@@ -51,7 +51,7 @@ class Impersonation(commands.Cog):
         webhook = await self.webhooks.get(ctx.channel, AsyncWebhookAdapter(session))
 
         await ctx.message.delete()
-        await webhook.send(message, username=ctx.author.name, avatar_url=ctx.author.avatar_url)
+        await webhook.send(message, username=victim.name, avatar_url=victim.avatar_url)
         await session.close()
     
     # opt in/out commands
