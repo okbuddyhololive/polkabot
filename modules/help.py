@@ -50,7 +50,7 @@ class PretenderHelpCommand(commands.MinimalHelpCommand):
         
         embed = Embed(
             title=f"`{self.get_command_signature(command)}`\n",
-            description=command.description,
+            description=command.help,
             colour=Colour.blurple()
         )
 
