@@ -34,7 +34,7 @@ class Counting(commands.Cog):
             occurences[author] += text.count(keyword)
         
         # sorting it by the most number of occurences
-        occurences = sorted(occurences.items(), key=lambda x: x[1], reverse=True)
+        occurences = dict(sorted(occurences.items(), key=lambda x: x[1], reverse=True))
 
         embed = Embed(
             title=f"Top 10 users who've typed '{keyword}':", 
