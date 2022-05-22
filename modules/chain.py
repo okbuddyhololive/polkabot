@@ -18,7 +18,7 @@ class MessageManager:
         cursor = self.collection.find({})
 
         if unlimited:
-            return await cursor.to_list()
+            return await cursor.to_list(length=999999999)
         else:
             return await cursor.to_list(length=self.max_limit)
     
