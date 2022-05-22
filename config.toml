@@ -1,4 +1,4 @@
-prefix = "." # a prefix for commands
+prefix = "pol " # a prefix for commands
 blacklist = [808887397550653490, 857822603292442674] # IDs of channels blocked from fetching messages from them
 
 [Database]
