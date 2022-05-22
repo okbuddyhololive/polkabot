@@ -47,7 +47,10 @@ class Counting(commands.Cog):
 
         for index, (id, count) in enumerate(occurences.items()):
             user = self.bot.get_user(int(id))
-
+            
+            if not user:
+                user = await self.bot.fetch_user(int(id))
+            
             embed.add_field(
                 name=f"#{index + 1} - {str(user)}",
                 value=f"**{count}** uses",
