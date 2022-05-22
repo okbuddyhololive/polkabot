@@ -19,15 +19,12 @@ class Counting(commands.Cog):
 
         keyword = keyword.lower()
         occurences = {}
-        messages = await self.messages.default(unlimited=True)
+        messages = await self.messages.containing(keyword)
 
         for message in messages:
             text = message.get("content")
             text = text.lower()
             author = message["author"]["id"]
-
-            if keyword not in text:
-                continue
             
             if author not in occurences:
                 occurences[author] = 0

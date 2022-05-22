@@ -3,6 +3,7 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 import markovify
 
 from typing import Dict, List, Union
+import re
 
 class MessageManager:
     def __init__(self, database: AsyncIOMotorDatabase, min_limit: int = 1_000, max_limit: int = 25_000, length: int = 200, tries: int = 100):
@@ -14,13 +15,16 @@ class MessageManager:
 
         self.tries = tries
     
-    async def default(self, unlimited: bool = False) -> List[Dict]:
+    async def default(self) -> List[Dict]:
         cursor = self.collection.find({})
 
-        if unlimited:
-            return await cursor.to_list(length=999999999)
-        else:
-            return await cursor.to_list(length=self.max_limit)
+        return await cursor.to_list(length=self.max_limit)
+    
+    async def containing(self, keyword: str) -> List[Dict]:
+        pattern = re.compile(keyword, re.IGNORECASE)
+        cursor = self.collection.find({"content": pattern})
+        
+        return await cursor.to_list(length=999_999_999)
     
     async def add(self, message: Message):
         return await self.collection.insert_one({
