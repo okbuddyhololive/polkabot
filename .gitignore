@@ -128,5 +128,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Bot logs
+# Logging files
 discord.log
+nohup.out
