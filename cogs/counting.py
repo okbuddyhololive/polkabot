@@ -19,7 +19,7 @@ class Counting(commands.Cog):
 
         keyword = keyword.lower()
         occurences = {}
-        messages = await self.messages.default()
+        messages = await self.messages.default(unlimited=True)
 
         for message in messages:
             text = message.get("content")

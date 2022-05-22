@@ -14,9 +14,13 @@ class MessageManager:
 
         self.tries = tries
     
-    async def default(self) -> List[Dict]:
+    async def default(self, unlimited: bool = False) -> List[Dict]:
         cursor = self.collection.find({})
-        return await cursor.to_list(length=self.max_limit)
+
+        if unlimited:
+            return await cursor.to_list()
+        else:
+            return await cursor.to_list(length=self.max_limit)
     
     async def add(self, message: Message):
         return await self.collection.insert_one({
