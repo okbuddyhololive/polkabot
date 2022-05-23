@@ -1,5 +1,6 @@
 from discord.ext import commands
 from discord import Embed, Colour
+from discord import NotFound
 
 from modules.chain import MessageManager
 
@@ -44,20 +45,26 @@ class Counting(commands.Cog):
         )
 
         embed.set_footer(text=f"Invoked by {ctx.author}", icon_url=ctx.author.avatar_url)
+        index = 1
 
-        for index, (id, count) in enumerate(occurences.items()):
+        for id, count in occurences.items():
             user = self.bot.get_user(int(id))
             
             if not user:
-                user = await self.bot.fetch_user(int(id))
+                try:
+                    user = await self.bot.fetch_user(int(id))
+                except NotFound:
+                    continue
             
             embed.add_field(
-                name=f"#{index + 1} - {str(user)}",
+                name=f"#{index} - {str(user)}",
                 value=f"**{count}** uses",
             )
 
-            if index == 9: # 10th place
+            if index == 10: # 10th place
                 break
+            
+            index += 1
         
         await ctx.message.reply(embed=embed, mention_author=False)
 
