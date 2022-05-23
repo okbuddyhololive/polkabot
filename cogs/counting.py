@@ -50,8 +50,6 @@ class Counting(commands.Cog):
         for id, count in occurences.items():
             user = self.bot.get_user(int(id))
 
-            await ctx.send(str(user))
-            
             if not user:
                 try:
                     user = await self.bot.fetch_user(int(id))
