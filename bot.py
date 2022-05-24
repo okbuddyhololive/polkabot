@@ -29,12 +29,8 @@ bot = commands.Bot(command_prefix=config["prefix"], help_command=PretenderHelpCo
 bot.config = config # for global cog access
 
 # database thingies
-uri = os.getenv("MONGODB_CONNECTION_URI")
-#name = uri.rsplit("/", 1)[-1]
-name = "pretender"
-
-client = motor.AsyncIOMotorClient(uri)
-bot.database = client[name]
+client = motor.AsyncIOMotorClient(os.getenv("MONGODB_CONNECTION_URI"))
+bot.database = client.get_default_database("pretender")
 
 # loading cogs
 bot.load_extension("cogs.impersonation")
