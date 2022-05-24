@@ -30,7 +30,8 @@ bot.config = config # for global cog access
 
 # database thingies
 uri = os.getenv("MONGODB_CONNECTION_URI")
-name = uri.rsplit("/", 1)[-1]
+#name = uri.rsplit("/", 1)[-1]
+name = "pretender"
 
 client = motor.AsyncIOMotorClient(uri)
 bot.database = client[name]
