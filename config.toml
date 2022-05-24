@@ -1,10 +1,6 @@
 prefix = "pol " # a prefix for commands
 blacklist = [808887397550653490, 857822603292442674] # IDs of channels blocked from fetching messages from them
 
-[Database]
-connection_uri = "mongodb://localhost:27017/" # a connection URI to a MongoDB database
-database_name = "pretender" # the database name to use
-
 [Chain]
 min_limit = 1000 # min limit of message for a chain to work
 max_limit = 25000 # max amount of messages for each user in the chain
