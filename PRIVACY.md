@@ -1,7 +1,7 @@
-# Project "Pretender"'s Privacy Policy
+# polkabot's Privacy Policy
 
 ## Introduction
-Project "Pretender" is a Discord bot, for impersonating users based on their messages they have sent to a server.
+polkabot is a Discord bot, for impersonating users based on their messages they have sent to a server.
 Because of this, we are required to process data about the users' messages. This Privacy Policy describes how we collect and use that data. Any mentions of "we", "our", "us" refer to the developers of the bot ("DocileSphinx" and "bemxio"). "They", "them", "their" refer to the users of the bot.
 
 ## Data Collection and Usage
