@@ -8,8 +8,6 @@ import os
 
 from modules.help import PretenderHelpCommand
 
-# just a test comment, will be deleted in a few seconds fgdt76908-iughc
-
 logger = logging.basicConfig(
     level=logging.INFO,
     format="(%(asctime)s) [%(levelname)s] %(message)s",

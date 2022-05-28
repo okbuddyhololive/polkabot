@@ -1,4 +1,4 @@
-name: Remote SSH Pull
+name: Updating and restarting the bot
 
 on: 
   push:
@@ -6,14 +6,16 @@ on:
     
 jobs:
   ssh:
+    name: Remote SSH Pull
     runs-on: ubuntu-latest
     
     steps:
-    - name: Pulling the latest commits via SSH
+    - name: Pull the latest commits
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
+
         script: ${{ secrets.SCRIPT }}
