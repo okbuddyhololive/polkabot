@@ -1,6 +1,8 @@
 from discord.ext import commands
-from discord import Embed, Colour
+from discord import Embed, Colour, User
 from discord import NotFound
+
+from typing import Union
 
 from modules.chain import MessageManager
 
@@ -11,7 +13,7 @@ class Counting(commands.Cog):
 
     @commands.command()
     @commands.cooldown(rate=1, per=30, type=commands.BucketType.user)
-    async def count(self, ctx: commands.Context, *, keyword: str):
+    async def count(self, ctx: commands.Context, *, content: Union[User, str]):
         """
         Counts the amount of messages containing a keyword and shows the Top #10 people who said it.
 
@@ -19,7 +21,11 @@ class Counting(commands.Cog):
         - `keyword`: The keyword to search for.
         """
 
-        keyword = keyword.lower()
+        if isinstance(content, str):
+            keyword = keyword.lower()
+        else:
+            keyword = f"@{content.name}"
+        
         occurences = {}
 
         async with ctx.typing():
@@ -36,10 +42,10 @@ class Counting(commands.Cog):
             occurences[author] += text.count(keyword)
         
         # sorting it by the most number of occurences
-        occurences = dict(sorted(occurences.items(), key=lambda x: x[1], reverse=True))
+        occurences = dict(sorted(occurences.items(), key=lambda occurence: occurence[1], reverse=True))
 
         embed = Embed(
-            title=f"Top 10 users who've typed '{keyword}':", 
+            title=f"Top #10 users who've said '{keyword}':", 
             #description="(based on message data collected here thus far)",
             colour=Colour.blurple(),
             timestamp=ctx.message.created_at
