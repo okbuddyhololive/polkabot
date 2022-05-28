@@ -22,7 +22,7 @@ class Counting(commands.Cog):
         """
 
         if isinstance(content, str):
-            keyword = keyword.lower()
+            keyword = content.lower()
         else:
             keyword = f"@{content.name}"
         
