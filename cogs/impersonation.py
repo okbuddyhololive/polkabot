@@ -35,6 +35,7 @@ class Impersonation(commands.Cog):
     
     # actual commands here
     @commands.command()
+    @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     async def impersonate(self, ctx: commands.Context, victim: Optional[User] = None):
         """
         Impersonates the invoker (or the person you specify), based on their messages that were collected.

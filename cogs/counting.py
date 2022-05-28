@@ -10,6 +10,7 @@ class Counting(commands.Cog):
         self.messages = messages
 
     @commands.command()
+    @commands.cooldown(rate=1, per=30, type=commands.BucketType.user)
     async def count(self, ctx: commands.Context, *, keyword: str):
         """
         Counts the amount of messages containing a keyword and shows the Top #10 people who said it.
