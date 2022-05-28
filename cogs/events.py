@@ -18,6 +18,12 @@ class Events(commands.Cog):
         if isinstance(error, commands.CommandNotFound):
             return
 
+        if isinstance(error, commands.CommandOnCooldown):
+            return await ctx.send(f"You're on cooldown, {ctx.author.mention}. Please try again in {round(error.retry_after, 2)} seconds.")
+        
+        if isinstance(error, commands.UserInputError):
+            return await ctx.send(f"Oops, you didn't type the command correctly, {ctx.author.mention}. Try again.")
+        
         exception = traceback.format_exception(type(error), error, error.__traceback__)
 
         message = (
