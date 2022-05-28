@@ -18,6 +18,10 @@ class PretenderHelpCommand(commands.MinimalHelpCommand):
                 continue
             
             name = cog.qualified_name if cog is not None else "Uncategorized"
+
+            if name == "Jishaku": # hide jishaku commands
+                continue
+            
             embed.description += f"__**{name}**__\n{signatures}\n"
 
         embed.set_footer(text=f"Invoked by {ctx.author}", icon_url=ctx.author.avatar_url)
