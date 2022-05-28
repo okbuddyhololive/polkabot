@@ -21,7 +21,8 @@ class MessageManager:
         return await cursor.to_list(length=self.max_limit)
     
     async def containing(self, keyword: str) -> List[Dict]:
-        pattern = re.compile(keyword, re.IGNORECASE)
+        pattern = re.escape(keyword)
+        pattern = re.compile(pattern, re.IGNORECASE)
         cursor = self.collection.find({"content": pattern})
         
         return await cursor.to_list(length=999_999_999)
