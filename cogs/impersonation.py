@@ -28,7 +28,7 @@ class Impersonation(commands.Cog):
         if message.channel.id in self.bot.config["blacklist"]:
             return
         
-        if self.blacklist.count_documents({"user": {"id": message.author.id}}):
+        if await self.blacklist.count_documents({"user": {"id": str(message.author.id)}}):
             return
         
         await self.messages.add(message)
@@ -65,9 +65,9 @@ class Impersonation(commands.Cog):
         None.
         """
 
-        document = {"user": {"id": ctx.author.id}}
+        document = {"user": {"id": str(ctx.author.id)}}
 
-        if not self.blacklist.count_documents(document):
+        if not await self.blacklist.count_documents(document):
             return await ctx.message.reply("You're already opted in!", mention_author=False)
         
         await self.blacklist.delete_one(document)
@@ -83,9 +83,9 @@ class Impersonation(commands.Cog):
         None.
         """
 
-        document = {"user": {"id": ctx.author.id}}
+        document = {"user": {"id": str(ctx.author.id)}}
 
-        if self.blacklist.count_documents(document):
+        if await self.blacklist.count_documents(document):
             return await ctx.message.reply("You're already opted out!", mention_author=False)
         
         def check(reaction, user):
