@@ -76,4 +76,6 @@ class Counting(commands.Cog):
         await ctx.message.reply(embed=embed, mention_author=False)
 
 def setup(bot: commands.Bot):
-    bot.add_cog(Counting(bot=bot, messages=MessageManager(bot.database, **bot.config["Chain"])))
+    bot.add_cog(Counting(bot=bot, 
+        messages=MessageManager(bot.database, **bot.config["Chain"])
+    ))

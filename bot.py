@@ -35,6 +35,7 @@ bot.database = client.get_default_database("pretender")
 # loading cogs
 bot.load_extension("cogs.impersonation")
 bot.load_extension("cogs.counting")
+bot.load_extension("cogs.opting")
 bot.load_extension("cogs.events")
 
 bot.load_extension("jishaku")
