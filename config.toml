@@ -9,3 +9,7 @@ tries = 100 # amount of tries to generate a message
 [Blacklists]
 channels = [808887397550653490, 857822603292442674] # IDs of channels blocked from fetching messages from them
 roles = [841163823435874384] # IDs of roles blocked from using `pol impersonate`
+
+[Fakekick]
+author = 804301771438555156 # a user ID of the author of a `pol fakekick/leave` message
+content = "bye retard {str(user)}  # **{user.id}** https://tenor.com/view/watame-ripbozo-packwatch-restinpiss-gif-21991440"

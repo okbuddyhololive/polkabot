@@ -60,6 +60,31 @@ class Impersonation(commands.Cog):
         await webhook.send(message, username=victim.name, avatar_url=victim.avatar_url)
         await session.close()
 
+    @commands.command(aliases=["leave"])
+    @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
+    async def fakekick(self, ctx: commands.Context, victim: Optional[User] = None):
+        """
+        Impersonates Saiki Koronbot, pretending the invoker (or the person the invoker specifies) has left the server,
+        by sending a message into the channel where the command was invoked.
+
+        **Arguments:**
+        - `victim`: The targeted user, is optional.
+        """
+
+        victim = victim or ctx.author
+        author = self.bot.get_user(self.bot.config["Fakekick"]["author"])
+
+        session = aiohttp.ClientSession()
+        webhook = await self.webhooks.get(ctx.channel, AsyncWebhookAdapter(session))
+
+        message = self.bot.config["Fakekick"]["content"]
+        message = message.format(user=victim)
+
+        await ctx.message.delete()
+
+        await webhook.send(message, username=author.name, avatar_url=author.avatar_url)
+        await session.close()
+
 def setup(bot: commands.Bot):
     bot.add_cog(Impersonation(bot=bot,
         messages=MessageManager(bot.database, **bot.config["Chain"]), 
