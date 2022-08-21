@@ -17,4 +17,10 @@ roles = [841163823435874384] # IDs of roles blocked from using `pol impersonate`
 
     [Commands.Gold] # settings for the `pol gold` command
     content = "Sorry, this message requires an {guild.name} **GOLD** subscription to view it.\n\nTo purchase an {guild.name} **GOLD** subscription, please reply with your social credit score and physical address." # the content for the message that will be sent
-    colour = [255, 0, 0] # an RGB value of the embed colour that will be sent 
+    colour = [255, 0, 0] # an RGB value of the embed colour that will be sent
+
+[Cooldowns] # the key is the command name, the value is the number of seconds between the specific command execution for a user
+impersonate = 5
+fakekick = 5
+gold = 5
+count = 10

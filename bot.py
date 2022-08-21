@@ -7,8 +7,9 @@ import logging
 import os
 
 from modules.help import PretenderHelpCommand
+from modules.cooldown import apply_cooldowns
 
-logger = logging.basicConfig(
+logging.basicConfig(
     level=logging.INFO,
     format="(%(asctime)s) [%(levelname)s] %(message)s",
     datefmt="%H:%M:%S",
@@ -39,5 +40,8 @@ bot.load_extension("cogs.opting")
 bot.load_extension("cogs.events")
 
 bot.load_extension("jishaku")
+
+# applying cooldowns
+apply_cooldowns(bot.config["Cooldowns"], bot.commands)
 
 bot.run(os.getenv("DISCORD_TOKEN"))
