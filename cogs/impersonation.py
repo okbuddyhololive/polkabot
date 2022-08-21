@@ -1,6 +1,8 @@
 from discord import Message, User, AsyncWebhookAdapter
 from discord import Embed, Colour
 from discord.ext import commands
+
+from motor.motor_asyncio import AsyncIOMotorCollection
 import aiohttp
 
 from typing import Optional
@@ -9,11 +11,12 @@ from modules.chain import MessageManager
 from modules.webhooks import WebhookManager
 
 class Impersonation(commands.Cog):
-    def __init__(self, bot: commands.Bot, messages: MessageManager, webhooks: WebhookManager):
+    def __init__(self, bot: commands.Bot, messages: MessageManager, webhooks: WebhookManager, blacklist: AsyncIOMotorCollection):
         self.bot = bot
 
         self.messages = messages
         self.webhooks = webhooks
+        self.blacklist = blacklist
     
     # events for interacting with webhook/message data
     @commands.Cog.listener()
@@ -113,5 +116,6 @@ class Impersonation(commands.Cog):
 def setup(bot: commands.Bot):
     bot.add_cog(Impersonation(bot=bot,
         messages=MessageManager(bot.database, **bot.config["Chain"]), 
-        webhooks=WebhookManager(bot.database)
+        webhooks=WebhookManager(bot.database),
+        blacklist=bot.database.blacklist
     ))
