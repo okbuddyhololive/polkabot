@@ -1,4 +1,5 @@
 from discord import Message, User, AsyncWebhookAdapter
+from discord import Embed, Colour
 from discord.ext import commands
 import aiohttp
 
@@ -72,17 +73,41 @@ class Impersonation(commands.Cog):
         """
 
         victim = victim or ctx.author
-        author = self.bot.get_user(self.bot.config["Fakekick"]["author"])
+        author = self.bot.get_user(self.bot.config["Commands"]["Fakekick"]["author"])
 
         session = aiohttp.ClientSession()
         webhook = await self.webhooks.get(ctx.channel, AsyncWebhookAdapter(session))
 
-        message = self.bot.config["Fakekick"]["content"]
+        message = self.bot.config["Commands"]["Fakekick"]["content"]
         message = message.format(user=victim)
 
         await ctx.message.delete()
 
         await webhook.send(message, username=author.name, avatar_url=author.avatar_url)
+        await session.close()
+
+    @commands.command()
+    @commands.cooldown(rate=1, per=5, type=commands.BucketType.user)
+    async def gold(self, ctx: commands.Context):
+        """
+        Pretends to hide an invoker's message behind a paywall, sending an embed. 
+
+        **Arguments:**
+        None.
+        """
+
+        session = aiohttp.ClientSession()
+        webhook = await self.webhooks.get(ctx.channel, AsyncWebhookAdapter(session))
+
+        message = self.bot.config["Commands"]["Gold"]["content"]
+        message = message.format(guild=ctx.guild)
+
+        colour = Colour.from_rgb(*self.bot.config["Commands"]["Gold"]["colour"])
+        embed = Embed(description=message, colour=colour)
+
+        await ctx.message.delete()
+
+        await webhook.send(embed=embed, avatar_url=ctx.author.avatar_url, username=ctx.author.name)
         await session.close()
 
 def setup(bot: commands.Bot):
