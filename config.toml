@@ -9,3 +9,12 @@ tries = 100 # amount of tries to generate a message
 [Blacklists]
 channels = [808887397550653490, 857822603292442674] # IDs of channels blocked from fetching messages from them
 roles = [841163823435874384] # IDs of roles blocked from using `pol impersonate`
+
+[Commands]
+    [Commands.Fakekick] # settings for the `pol fakekick` command
+    author = 804301771438555156 # a user ID of the author of a `pol fakekick` message
+    content = "bye retard {user.name}#{user.discriminator}  # **{user.id}** https://tenor.com/view/watame-ripbozo-packwatch-restinpiss-gif-21991440" # the content for the message that will be sent with the `pol fakekick` command
+
+    [Commands.Gold] # settings for the `pol gold` command
+    content = "Sorry, this message requires an {guild.name} **GOLD** subscription to view it.\n\nTo purchase an {guild.name} **GOLD** subscription, please reply with your social credit score and physical address." # the content for the message that will be sent
+    colour = [255, 0, 0] # an RGB value of the embed colour that will be sent 
