@@ -27,6 +27,6 @@ roles = [841163823435874384] # IDs of roles blocked from using `pol impersonate`
     count = 10
 
     [Cooldowns.Whitelists]
-    users = []
-    roles = []
-    channels = [985721811239063592]
+    users = [] # a list of user IDs excluded from the cooldowns
+    roles = [] # a list of role IDs excluded from the cooldowns
+    channels = [985721811239063592] # a list of channel IDs excluded from the cooldowns
