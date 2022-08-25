@@ -1,5 +1,5 @@
 discord.py==1.7.3
-markovify==0.9.4
 jishaku==2.4.0
-toml==0.10.2
+tomli==2.0.1
+markovify==0.9.4
 motor==3.0.0

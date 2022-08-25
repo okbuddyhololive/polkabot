@@ -1,7 +1,7 @@
 from discord.ext import commands
 from discord import Intents
 import motor.motor_asyncio as motor
-import toml
+import tomli
 
 import logging
 import os
@@ -21,7 +21,7 @@ logging.basicConfig(
 )
 
 with open("config.toml") as file:
-    config = toml.load(file)
+    config = tomli.load(file)
 
 intents = Intents.default()
 intents.members = True # needed for $count
