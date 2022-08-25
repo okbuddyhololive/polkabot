@@ -5,6 +5,8 @@ from io import StringIO
 import traceback
 import logging
 
+from modules.cooldown import is_whitelisted
+
 class Events(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -19,6 +21,9 @@ class Events(commands.Cog):
             return
 
         if isinstance(error, commands.CommandOnCooldown):
+            if is_whitelisted(ctx, self.bot.config["Cooldowns"]["Whitelists"]):
+                return ctx.command.reset_cooldown(ctx)
+            
             return await ctx.send(f"You're on cooldown, {ctx.author.mention}. Please try again in {round(error.retry_after, 2)} seconds.")
         
         if isinstance(error, commands.UserInputError):

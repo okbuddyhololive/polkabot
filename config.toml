@@ -1,4 +1,4 @@
-prefix = "pol " # a prefix for commands
+prefix = "." # a prefix for commands
 
 [Chain]
 min_limit = 1000 # min limit of message for a chain to work
@@ -29,4 +29,4 @@ roles = [841163823435874384] # IDs of roles blocked from using `pol impersonate`
     [Cooldowns.Whitelists]
     users = []
     roles = []
-    guilds = [963524275929747457]
+    channels = [985721811239063592]
