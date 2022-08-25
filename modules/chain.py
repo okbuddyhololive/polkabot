@@ -25,7 +25,7 @@ class MessageManager:
         pattern = re.compile(pattern, re.IGNORECASE)
         cursor = self.collection.find({"content": pattern})
         
-        return await cursor.to_list(length=999_999_999)
+        return await cursor.to_list(length=None)
     
     async def add(self, message: Message):
         return await self.collection.insert_one({
