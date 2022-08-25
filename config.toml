@@ -1,4 +1,4 @@
-prefix = "pol " # a prefix for commands
+prefix = ["pol ", "."] # prefixes for commands
 
 [Chain]
 min_limit = 1000 # min limit of message for a chain to work
