@@ -20,7 +20,7 @@ logging.basicConfig(
     ]
 )
 
-with open("config.toml") as file:
+with open("config.toml", "rb") as file:
     config = tomli.load(file)
 
 intents = Intents.default()
