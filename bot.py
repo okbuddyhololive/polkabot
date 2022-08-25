@@ -42,6 +42,6 @@ bot.load_extension("cogs.events")
 bot.load_extension("jishaku")
 
 # applying cooldowns
-apply_cooldowns(bot.config["Cooldowns"], bot.commands)
+apply_cooldowns(bot.config["Cooldowns"]["Durations"], bot.commands)
 
 bot.run(os.getenv("DISCORD_TOKEN"))
