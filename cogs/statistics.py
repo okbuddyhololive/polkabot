@@ -40,6 +40,7 @@ class Statistics(commands.Cog):
         for message in messages:
             text = message.get("content")
             text = text.lower()
+            
             author = message["author"]["id"]
             
             if author not in occurences:
@@ -51,8 +52,7 @@ class Statistics(commands.Cog):
         occurences = dict(sorted(occurences.items(), key=lambda occurence: occurence[1], reverse=True))
 
         embed = Embed(
-            title=f"Top #10 users who've said '{keyword}':", 
-            #description="(based on message data collected here thus far)",
+            title=f"Top #10 users who've said \"{keyword}\":", 
             colour=Colour.blurple(),
             timestamp=ctx.message.created_at
         )
@@ -99,13 +99,13 @@ class Statistics(commands.Cog):
         occurences = dict(sorted(occurences.items(), key=lambda occurence: occurence[1], reverse=True))
 
         embed = Embed(
-            title=f"Top #10 words said by '{target.display_name}':", 
+            title=f"Top #10 words said by {target.display_name}:", 
             colour=Colour.blurple(),
             timestamp=ctx.message.created_at
         )
 
         embed.set_footer(text=f"Invoked by {ctx.author}", icon_url=ctx.author.avatar_url)
-        embed.set_thumbnail(url=target.avatar_url)
+        #embed.set_thumbnail(url=target.avatar_url)
 
         index = 1
 
