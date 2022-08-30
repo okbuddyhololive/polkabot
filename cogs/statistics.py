@@ -9,7 +9,9 @@ from modules.chain import MessageManager
 class Statistics(commands.Cog):
     def __init__(self, bot: commands.Bot, messages: MessageManager):
         self.bot = bot
+
         self.messages = messages
+        self.stopwords = self.bot.config["Commands"]["User"]["stopwords"]
 
     # helper functions
     def word_split(self, text: str) -> List[str]:
@@ -86,6 +88,9 @@ class Statistics(commands.Cog):
 
         for message in messages:
             for word in self.word_split(message.get("content", "")):
+                if word in self.stopwords:
+                    continue
+                
                 if word not in occurences:
                     occurences[word] = 0
 
@@ -100,7 +105,7 @@ class Statistics(commands.Cog):
         )
 
         embed.set_footer(text=f"Invoked by {ctx.author}", icon_url=ctx.author.avatar_url)
-        #embed.set_thumbnail(url=target.avatar_url)
+        embed.set_thumbnail(url=target.avatar_url)
 
         index = 1
 
