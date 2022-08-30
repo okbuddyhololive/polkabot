@@ -15,6 +15,10 @@ class MessageManager:
 
         self.tries = tries
     
+    async def get(self, user: Union[Member, User]) -> List[Dict]:
+        cursor = self.collection.find({"author": {"id": str(user.id)}})
+        return await cursor.to_list(length=None)
+    
     async def default(self) -> List[Dict]:
         cursor = self.collection.find({})
 

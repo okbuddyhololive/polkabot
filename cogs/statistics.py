@@ -2,7 +2,7 @@ from discord.ext import commands
 from discord import Embed, Colour, User
 from discord import NotFound
 
-from typing import Union
+from typing import Union, Optional, List
 
 from modules.chain import MessageManager
 
@@ -11,6 +11,13 @@ class Statistics(commands.Cog):
         self.bot = bot
         self.messages = messages
 
+    # helper functions
+    def word_split(self, text: str) -> List[str]:
+        content = text.lower()
+
+        return content.split()
+    
+    # actual commands
     @commands.command()
     async def count(self, ctx: commands.Context, *, content: Union[User, str]):
         """
@@ -70,6 +77,47 @@ class Statistics(commands.Cog):
             if index == 10: # 10th place
                 break
             
+            index += 1
+        
+        await ctx.message.reply(embed=embed, mention_author=False)
+
+    @commands.command()
+    async def user(self, ctx: commands.Context, target: Optional[User] = None):
+        target = target or ctx.author
+        occurences = {}
+
+        async with ctx.typing():
+            messages = await self.messages.get(target)
+
+        for message in messages:
+            for word in self.word_split(message.get("content", "")):
+                if word not in occurences:
+                    occurences[word] = 0
+
+                occurences[word] += 1
+        
+        occurences = dict(sorted(occurences.items(), key=lambda occurence: occurence[1], reverse=True))
+
+        embed = Embed(
+            title=f"Top #10 words said by '{target.display_name}':", 
+            colour=Colour.blurple(),
+            timestamp=ctx.message.created_at
+        )
+
+        embed.set_footer(text=f"Invoked by {ctx.author}", icon_url=ctx.author.avatar_url)
+        embed.set_thumbnail(url=target.avatar_url)
+
+        index = 1
+
+        for word, count in occurences.items():
+            embed.add_field(
+                name=f"#{index} - \"{word}\"",
+                value=f"**{count}** uses",
+            )
+
+            if index == 10: # 10th place
+                break
+
             index += 1
         
         await ctx.message.reply(embed=embed, mention_author=False)
