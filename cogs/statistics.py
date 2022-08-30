@@ -90,6 +90,9 @@ class Statistics(commands.Cog):
             for word in self.word_split(message.get("content", "")):
                 if word in self.stopwords:
                     continue
+
+                if word.startswith(":") and word.endswith(":"):
+                    continue
                 
                 if word not in occurences:
                     occurences[word] = 0
