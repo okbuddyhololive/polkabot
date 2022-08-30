@@ -6,7 +6,7 @@ from typing import Union
 
 from modules.chain import MessageManager
 
-class Counting(commands.Cog):
+class Statistics(commands.Cog):
     def __init__(self, bot: commands.Bot, messages: MessageManager):
         self.bot = bot
         self.messages = messages
@@ -75,6 +75,6 @@ class Counting(commands.Cog):
         await ctx.message.reply(embed=embed, mention_author=False)
 
 def setup(bot: commands.Bot):
-    bot.add_cog(Counting(bot=bot, 
+    bot.add_cog(Statistics(bot=bot, 
         messages=MessageManager(bot.database, **bot.config["Chain"])
     ))
