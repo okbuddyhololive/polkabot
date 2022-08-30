@@ -79,7 +79,7 @@ class Statistics(commands.Cog):
         await ctx.message.reply(embed=embed, mention_author=False)
 
     @commands.command()
-    async def user(self, ctx: commands.Context, target: Optional[User] = None):
+    async def top(self, ctx: commands.Context, target: Optional[User] = None):
         target = target or ctx.author
         occurences = {}
 
@@ -93,7 +93,7 @@ class Statistics(commands.Cog):
 
                 if word.startswith(":") and word.endswith(":"):
                     continue
-                
+
                 if word not in occurences:
                     occurences[word] = 0
 
