@@ -2,7 +2,7 @@ from discord.ext import commands
 from discord import Embed, Colour, User
 from discord import NotFound
 
-from typing import Union, Optional, List
+from typing import Optional, List
 
 from modules.chain import MessageManager
 
@@ -19,18 +19,13 @@ class Statistics(commands.Cog):
     
     # actual commands
     @commands.command()
-    async def count(self, ctx: commands.Context, *, content: Union[User, str]):
+    async def count(self, ctx: commands.Context, *, keyword: str):
         """
         Counts the amount of messages containing a keyword and shows the Top #10 people who said it.
 
         **Arguments:**
         - `keyword`: The keyword to search for.
         """
-
-        if isinstance(content, str):
-            keyword = content.lower()
-        else:
-            keyword = f"@{content.name}"
         
         occurences = {}
 
@@ -40,7 +35,7 @@ class Statistics(commands.Cog):
         for message in messages:
             text = message.get("content")
             text = text.lower()
-            
+
             author = message["author"]["id"]
             
             if author not in occurences:
