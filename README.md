@@ -9,11 +9,14 @@ It uses webhooks to send message to a channel with a custom username and avatar 
 Before running the bot, make sure you are running Python 3.8 or later.
 You can download the latest version of Python from [Python.org](https://www.python.org/downloads/).
 
+The bot also requires the **Message Content Intent**, as well as the **Server Members Intent**.
+
 1. Set up a MongoDB database (use the [installation guides](https://www.mongodb.com/docs/manual/administration/install-community/) for help). 
     - You can either install it on your host machine, or use a remote MongoDB server, as long as it's accessible from your
 host via a connection URI.
-2. Create an application with a bot on [Discord Developer Portal](https://discord.com/developers/applications/).
-    - For exact instructions, see [this guide](https://discordpy.readthedocs.io/en/stable/discord.html). It will help you to create an invite link for the bot as well.
+2. Create an application with a bot on [Discord Developer Portal](https://discord.com/developers/applications/), remembering to enable the required intents mentioned above.
+    - For instructions on creating the account, see [this guide](https://discordpy.readthedocs.io/en/stable/discord.html). It will help you to create an invite link for the bot as well.
+    - For enabling intents, see [this guide](https://discordpy.readthedocs.io/en/v1.7.3/intents.html#privileged-intents).
 3. Clone the repository to your host machine, or download the source code using the `Code > Download ZIP` button.
 4. Fill out all the values in the `config.toml` file, according to the comments in the file.
 5. Set a permanent system-wide environment variable `DISCORD_TOKEN` with the bot's token, that you can get on the Discord Developer Portal.
