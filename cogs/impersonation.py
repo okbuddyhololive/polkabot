@@ -76,6 +76,9 @@ class Impersonation(commands.Cog):
         victim = victim or ctx.author
         author = self.bot.get_user(self.bot.config["Commands"]["Fakekick"]["author"])
 
+        if not author:
+            author = await self.bot.fetch_user(self.bot.config["Commands"]["Fakekick"]["author"])
+
         session = aiohttp.ClientSession()
         webhook = await self.webhooks.get(ctx.channel, AsyncWebhookAdapter(session))
 
