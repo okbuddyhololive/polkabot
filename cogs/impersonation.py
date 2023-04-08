@@ -18,6 +18,18 @@ class Impersonation(commands.Cog):
         self.webhooks = webhooks
         self.blacklist = blacklist
     
+    # helper functions
+    def censor_bad_words(self, text: str) -> str:
+        censored_text = text
+
+        for word in self.bot.config["Commands"]["Impersonate"]["censored"]:
+            if word not in censored_text:
+                continue
+
+            censored_text = censored_text.replace(word, word[0] + ("*" * (len(word) - 2)) + word[-1])
+
+        return censored_text
+
     # events for interacting with webhook/message data
     @commands.Cog.listener()
     async def on_message(self, message: Message):
@@ -60,7 +72,7 @@ class Impersonation(commands.Cog):
 
         await ctx.message.delete()
 
-        await webhook.send(message, username=victim.name, avatar_url=victim.avatar_url)
+        await webhook.send(self.censor_bad_words(message), username=victim.name, avatar_url=victim.avatar_url)
         await session.close()
 
     @commands.command(aliases=["leave"])
