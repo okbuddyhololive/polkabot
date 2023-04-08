@@ -43,6 +43,7 @@ class Events(commands.Cog):
         file = File(stream, filename="error.log")
         
         await ctx.send(message, file=file)
+
         logging.warning(f"A user tried to use `{self.bot.command_prefix}{ctx.command}` but got an error: {error}")
 
 def setup(bot: commands.Bot):

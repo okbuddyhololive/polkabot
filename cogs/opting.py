@@ -42,10 +42,7 @@ class Opting(commands.Cog):
 
         if await self.blacklist.count_documents(document):
             return await ctx.message.reply("You're already opted out!", mention_author=False)
-        
-        def check(reaction, user):
-            return 
-        
+
         message = await ctx.message.reply("Are you sure you want to opt out?\nReact with ✅ to confirm.", mention_author=False)
         await message.add_reaction("✅")
 
