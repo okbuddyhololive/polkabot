@@ -39,8 +39,6 @@ bot.load_extension("cogs.statistics")
 bot.load_extension("cogs.opting")
 bot.load_extension("cogs.events")
 
-bot.load_extension("jishaku")
-
 # applying cooldowns
 apply_cooldowns(bot.config["Cooldowns"]["Durations"], bot.commands)
 
