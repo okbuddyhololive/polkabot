@@ -12,6 +12,7 @@ class Statistics(commands.Cog):
 
         self.messages = messages
         self.stopwords = self.bot.config["Commands"]["User"]["stopwords"]
+        self.censored = self.bot.config["Commands"]["Impersonate"]["censored"]
 
     # helper functions
     def word_split(self, text: str) -> List[str]:
@@ -95,7 +96,7 @@ class Statistics(commands.Cog):
 
         for message in messages:
             for word in self.word_split(message.get("content", "")):
-                if word in self.stopwords:
+                if word in self.stopwords + self.censored:
                     continue
 
                 if word.startswith(":") and word.endswith(":"):
