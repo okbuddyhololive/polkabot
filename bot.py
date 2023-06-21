@@ -49,4 +49,5 @@ bot.load_extension("cogs.events")
 # apply cooldowns to commands
 apply_cooldowns(bot.config["Cooldowns"]["Durations"], bot.commands)
 
+# run the bot
 bot.run(os.getenv("DISCORD_TOKEN"))

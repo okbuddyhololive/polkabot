@@ -9,7 +9,7 @@ We are collecting data about messages sent by members in the server. The data la
 As such, we are not storing any personal data about the users, except for their Discord ID, which is used to identify them for gathering messages for impersonation.
 
 The exact data that is taken is as follows:
-- A user's Discord ID, used to gathering all of their messages that the bot collected.
+- A user's Discord ID, used to gather all of their messages that the bot collected.
 - The message content they sent, which is used to generate the message that will be sent to the bot invoker.
 
 The message data is stored in a database, and is not shared with anyone else, except for us and the bot.
