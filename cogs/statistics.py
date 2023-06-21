@@ -19,7 +19,8 @@ class Statistics(commands.Cog):
 
     # helper functions
     def word_split(self, text: str) -> List[str]:
-        content = text.lower()
+        content = text.strip().lower()
+        content = content.translate(str.maketrans("", "", "!\"#$%&'()*+,-./:;<=>?[\\]^_`{|}~"))
 
         return content.split()
 
@@ -85,7 +86,7 @@ class Statistics(commands.Cog):
     @commands.command()
     async def top(self, ctx: commands.Context, target: Optional[User] = None):
         """
-        Counts the amount for each word that a user has said and shows the Top 10 words.
+        Counts and shows the 10 most used words by a user.
 
         **Arguments:**
         - `target`: The user that will be analyzed.
@@ -102,7 +103,7 @@ class Statistics(commands.Cog):
                 if word in self.stopwords + self.censored:
                     continue
 
-                if word.startswith(":") and word.endswith(":"):
+                if word.startswith("http") or word.endswith("www"):
                     continue
 
                 if word not in occurences:
@@ -113,7 +114,61 @@ class Statistics(commands.Cog):
         occurences = dict(sorted(occurences.items(), key=lambda occurence: occurence[1], reverse=True))
 
         embed = Embed(
-            title=f"Top 10 words said by {target.display_name}:", 
+            title=f"Top 10 words said the most by {target.display_name}:", 
+            colour=Colour.blurple(),
+            timestamp=ctx.message.created_at
+        )
+
+        embed.set_footer(text=f"Invoked by @{ctx.author.display_name}", icon_url=ctx.author.display_avatar.url)
+        embed.set_thumbnail(url=target.display_avatar.url)
+
+        index = 1
+
+        for word, count in occurences.items():
+            embed.add_field(
+                name=f"#{index} - \"{word}\"",
+                value=f"**{count}** uses",
+            )
+
+            if index == 10: # 10th place
+                break
+
+            index += 1
+
+        await ctx.message.reply(embed=embed, mention_author=False)
+
+    @commands.command()
+    async def bottom(self, ctx: commands.Context, target: Optional[User] = None):
+        """
+        Counts and shows the 10 least used words by a user.
+
+        **Arguments:**
+        - `target`: The user that will be analyzed.
+        """
+
+        target = target or ctx.author
+        occurences = {}
+
+        async with ctx.typing():
+            messages = await self.messages.get(target)
+
+        for message in messages:
+            for word in self.word_split(message.get("content", "")):
+                if word in self.stopwords + self.censored:
+                    continue
+
+                if word.startswith("http") or word.endswith("www"):
+                    continue
+
+                if word not in occurences:
+                    occurences[word] = 0
+
+                occurences[word] += 1
+
+        occurences = dict(sorted(occurences.items(), key=lambda occurence: occurence[1]))
+
+        embed = Embed(
+            title=f"Top 10 words said the least by {target.display_name}:",
             colour=Colour.blurple(),
             timestamp=ctx.message.created_at
         )
