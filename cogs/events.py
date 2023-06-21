@@ -10,7 +10,7 @@ from modules.cooldown import is_whitelisted
 class Events(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-    
+
     @commands.Cog.listener()
     async def on_ready(self):
         logging.info(f"Logged in as {self.bot.user}!")
@@ -23,25 +23,25 @@ class Events(commands.Cog):
         if isinstance(error, commands.CommandOnCooldown):
             if is_whitelisted(ctx, self.bot.config["Cooldowns"]["Whitelists"]):
                 return ctx.command.reset_cooldown(ctx)
-            
+
             return await ctx.send(f"You're on cooldown, {ctx.author.mention}. Please try again in {round(error.retry_after, 2)} seconds.")
-        
+
         if isinstance(error, commands.UserInputError):
             return await ctx.send(f"Oops, you didn't type the command correctly, {ctx.author.mention}.\nUse `{ctx.prefix}help {ctx.command.name}` for more information.")
-        
+
         if isinstance(error, commands.NotOwner):
             return
-        
+
         exception = traceback.format_exception(type(error), error, error.__traceback__)
 
         message = (
             "Uh oh, I've ran into an issue while trying to execute this command!\n"
             "Please send the file below to the bot developers via DMs:\n"
         )
-        
+
         stream = StringIO("".join(exception))
         file = File(stream, filename="error.log")
-        
+
         await ctx.send(message, file=file)
 
         logging.warning(f"A user tried to use `{self.bot.command_prefix}{ctx.command}` but got an error: {error}")

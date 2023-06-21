@@ -9,7 +9,7 @@ class Opting(commands.Cog):
 
         self.messages = messages
         self.blacklist = blacklist
-    
+
     # opt in/out commands
     @commands.command()
     async def optin(self, ctx: commands.Context):
@@ -24,7 +24,7 @@ class Opting(commands.Cog):
 
         if not await self.blacklist.count_documents(document):
             return await ctx.message.reply("You're already opted in!", mention_author=False)
-        
+
         await self.blacklist.delete_one(document)
         await ctx.message.reply("You're now opted in!", mention_author=False)
 
@@ -53,7 +53,7 @@ class Opting(commands.Cog):
             )
         except TimeoutError:
             return await message.edit(content="Didn't get a reaction in time, so you're still opted in.")
-        
+
         await self.messages.remove(ctx.author)
         await self.blacklist.insert_one(document)
 

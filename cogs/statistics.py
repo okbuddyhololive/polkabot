@@ -19,7 +19,7 @@ class Statistics(commands.Cog):
         content = text.lower()
 
         return content.split()
-    
+
     # actual commands
     @commands.command()
     async def count(self, ctx: commands.Context, *, keyword: str):
@@ -29,7 +29,7 @@ class Statistics(commands.Cog):
         **Arguments:**
         - `keyword`: The keyword to search for.
         """
-        
+
         occurences = {}
 
         async with ctx.typing():
@@ -40,12 +40,12 @@ class Statistics(commands.Cog):
             text = text.lower()
 
             author = message["author"]["id"]
-            
+
             if author not in occurences:
                 occurences[author] = 0
-                
+
             occurences[author] += text.count(keyword)
-        
+
         # sorting it by the most number of occurences
         occurences = dict(sorted(occurences.items(), key=lambda occurence: occurence[1], reverse=True))
 
@@ -55,7 +55,7 @@ class Statistics(commands.Cog):
             timestamp=ctx.message.created_at
         )
 
-        embed.set_footer(text=f"Invoked by {ctx.author}", icon_url=ctx.author.avatar_url)
+        embed.set_footer(text=f"Invoked by {ctx.author}", icon_url=ctx.author.display_avatar.url)
         index = 1
 
         for id, count in occurences.items():
@@ -66,7 +66,7 @@ class Statistics(commands.Cog):
                     user = await self.bot.fetch_user(int(id))
                 except NotFound:
                     continue
-            
+
             embed.add_field(
                 name=f"#{index} - {str(user)}",
                 value=f"**{count}** uses",
@@ -74,9 +74,9 @@ class Statistics(commands.Cog):
 
             if index == 10: # 10th place
                 break
-            
+
             index += 1
-        
+
         await ctx.message.reply(embed=embed, mention_author=False)
 
     @commands.command()
@@ -87,7 +87,7 @@ class Statistics(commands.Cog):
         **Arguments:**
         - `target`: The user that will be analyzed.
         """
-        
+
         target = target or ctx.author
         occurences = {}
 
@@ -106,7 +106,7 @@ class Statistics(commands.Cog):
                     occurences[word] = 0
 
                 occurences[word] += 1
-        
+
         occurences = dict(sorted(occurences.items(), key=lambda occurence: occurence[1], reverse=True))
 
         embed = Embed(
@@ -115,8 +115,8 @@ class Statistics(commands.Cog):
             timestamp=ctx.message.created_at
         )
 
-        embed.set_footer(text=f"Invoked by {ctx.author}", icon_url=ctx.author.avatar_url)
-        embed.set_thumbnail(url=target.avatar_url)
+        embed.set_footer(text=f"Invoked by {ctx.author}", icon_url=ctx.author.display_avatar.url)
+        embed.set_thumbnail(url=target.display_avatar.url)
 
         index = 1
 
@@ -130,7 +130,7 @@ class Statistics(commands.Cog):
                 break
 
             index += 1
-        
+
         await ctx.message.reply(embed=embed, mention_author=False)
 
 def setup(bot: commands.Bot):

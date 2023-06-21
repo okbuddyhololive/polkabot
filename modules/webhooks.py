@@ -1,5 +1,7 @@
 from __future__ import annotations
-from discord import Webhook, AsyncWebhookAdapter, TextChannel
+
+from aiohttp import ClientSession
+from discord import Webhook, TextChannel
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
 class WebhookManager:
@@ -7,22 +9,17 @@ class WebhookManager:
         self.collection = database.webhooks
 
     # methods for interacting with a specific webhook in a collection
-    async def get(self, channel: TextChannel, adapter: AsyncWebhookAdapter) -> Webhook:
+    async def get(self, channel: TextChannel, session: ClientSession) -> Webhook:
         webhook = await self.collection.find_one({"channel": {"id": str(channel.id)}})
 
         if webhook is None:
             return await self.create(channel)
-        
-        # stuff so that the webhook class will work 
-        webhook.pop("_id")
-        webhook.pop("channel")
-        webhook["type"] = 1
-        
-        return Webhook(webhook, adapter=adapter)
+
+        return Webhook.partial(id=int(webhook.get("id")), token=webhook.get("token"), session=session)
 
     async def create(self, channel: TextChannel) -> Webhook:
         webhook = await channel.create_webhook(name=f"#{channel.name} Impersonation Webhook")
-        
+
         await self.collection.insert_one({
             "id": str(webhook.id),
             "token": webhook.token,

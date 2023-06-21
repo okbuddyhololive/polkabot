@@ -1,4 +1,4 @@
-from discord import Message, User, AsyncWebhookAdapter
+from discord import Message, User
 from discord import Embed, Colour
 from discord.ext import commands
 
@@ -17,7 +17,7 @@ class Impersonation(commands.Cog):
         self.messages = messages
         self.webhooks = webhooks
         self.blacklist = blacklist
-    
+
     # helper functions
     def censor_bad_words(self, text: str) -> str:
         censored_text = text
@@ -35,18 +35,18 @@ class Impersonation(commands.Cog):
     async def on_message(self, message: Message):
         if message.author.bot:
             return
-        
+
         if not message.clean_content:
             return
-        
+
         if message.channel.id in self.bot.config["Blacklists"]["channels"]:
             return
-        
+
         if await self.blacklist.count_documents({"user": {"id": str(message.author.id)}}):
             return
-        
+
         await self.messages.add(message)
-    
+
     # actual commands here
     @commands.command()
     async def impersonate(self, ctx: commands.Context, victim: Optional[User] = None):
@@ -61,18 +61,18 @@ class Impersonation(commands.Cog):
         for role in ctx.author.roles:
             if role.id not in self.bot.config["Blacklists"]["roles"]:
                 continue
-                
+
             return await ctx.message.reply("Whoops, it seems like you have a role that is blacklisted! Sorry, but you cannot use this command!", mention_author=False)
-        
+
         session = aiohttp.ClientSession()
         victim = victim or ctx.author
 
         message = await self.messages.generate(victim)
-        webhook = await self.webhooks.get(ctx.channel, AsyncWebhookAdapter(session))
+        webhook = await self.webhooks.get(ctx.channel, session=session)
 
         await ctx.message.delete()
 
-        await webhook.send(self.censor_bad_words(message), username=victim.name, avatar_url=victim.avatar_url)
+        await webhook.send(self.censor_bad_words(message), username=victim.name, avatar_url=victim.display_avatar.url)
         await session.close()
 
     @commands.command(aliases=["leave"])
@@ -92,14 +92,14 @@ class Impersonation(commands.Cog):
             author = await self.bot.fetch_user(self.bot.config["Commands"]["Fakekick"]["author"])
 
         session = aiohttp.ClientSession()
-        webhook = await self.webhooks.get(ctx.channel, AsyncWebhookAdapter(session))
+        webhook = await self.webhooks.get(ctx.channel, session=session)
 
         message = self.bot.config["Commands"]["Fakekick"]["content"]
         message = message.format(user=victim)
 
         await ctx.message.delete()
 
-        await webhook.send(message, username=author.name, avatar_url=author.avatar_url)
+        await webhook.send(message, username=author.name, avatar_url=author.display_avatar.url)
         await session.close()
 
     @commands.command()
@@ -112,7 +112,7 @@ class Impersonation(commands.Cog):
         """
 
         session = aiohttp.ClientSession()
-        webhook = await self.webhooks.get(ctx.channel, AsyncWebhookAdapter(session))
+        webhook = await self.webhooks.get(ctx.channel, session=session)
 
         message = self.bot.config["Commands"]["Gold"]["content"]
         message = message.format(guild=ctx.guild)
@@ -122,7 +122,7 @@ class Impersonation(commands.Cog):
 
         await ctx.message.delete()
 
-        await webhook.send(embed=embed, avatar_url=ctx.author.avatar_url, username=ctx.author.name)
+        await webhook.send(embed=embed, avatar_url=ctx.author.display_avatar.url, username=ctx.author.name)
         await session.close()
 
 def setup(bot: commands.Bot):

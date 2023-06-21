@@ -14,23 +14,25 @@ class MessageManager:
         self.length = length
 
         self.tries = tries
-    
+
     async def get(self, user: Union[Member, User]) -> List[Dict]:
         cursor = self.collection.find({"author": {"id": str(user.id)}})
+
         return await cursor.to_list(length=None)
-    
+
     async def default(self) -> List[Dict]:
         cursor = self.collection.find({})
 
         return await cursor.to_list(length=self.max_limit)
-    
+
     async def containing(self, keyword: str) -> List[Dict]:
         pattern = re.escape(keyword)
         pattern = re.compile(pattern, re.IGNORECASE)
+
         cursor = self.collection.find({"content": pattern})
-        
+
         return await cursor.to_list(length=None)
-    
+
     async def add(self, message: Message):
         return await self.collection.insert_one({
             "author": {"id": str(message.author.id)},
@@ -46,7 +48,7 @@ class MessageManager:
 
         if not dataset or len(dataset) < self.min_limit:
             dataset = await self.default()
-        
+
         dataset = [message.get("content") for message in dataset]
         chain = markovify.NewlineText(dataset, well_formed=False)
 

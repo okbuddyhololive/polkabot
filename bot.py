@@ -18,7 +18,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="(%(asctime)s) [%(levelname)s] %(message)s",
     datefmt="%H:%M:%S",
-    
+
     handlers=[
         logging.FileHandler(filename="discord.log", encoding="utf-8"),
         logging.StreamHandler() # for printing stuff to the console
@@ -31,10 +31,12 @@ with open("config.toml", "rb") as file:
 
 # create the bot object
 intents = Intents.default()
-intents.members = True # needed for $count
+
+intents.message_content = True
+intents.members = True
 
 bot = commands.Bot(command_prefix=config["prefix"], help_command=PretenderHelpCommand(), intents=intents)
-bot.config = config # for global cog access
+bot.config = config
 
 # initialize the database
 client = motor.AsyncIOMotorClient(os.getenv("MONGODB_CONNECTION_URI"))
