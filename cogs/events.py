@@ -16,7 +16,7 @@ class Events(commands.Cog):
         logging.info(f"Logged in as {self.bot.user}!")
 
     @commands.Cog.listener()
-    async def on_command_error(self, ctx: commands.Context, error):
+    async def on_command_error(self, ctx: commands.Context, error: commands.CommandError):
         if isinstance(error, commands.CommandNotFound):
             return
 
