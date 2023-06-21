@@ -1,5 +1,8 @@
 from discord.ext import commands
-from discord import Embed, Colour, User
+from discord import utils
+
+from discord import Member, User
+from discord import Embed, Colour
 from discord import NotFound
 
 from typing import Optional, List
@@ -55,20 +58,20 @@ class Statistics(commands.Cog):
             timestamp=ctx.message.created_at
         )
 
-        embed.set_footer(text=f"Invoked by {ctx.author}", icon_url=ctx.author.display_avatar.url)
+        embed.set_footer(text=f"Invoked by @{ctx.author.display_name}", icon_url=ctx.author.display_avatar.url)
         index = 1
 
         for id, count in occurences.items():
-            user = self.bot.get_user(int(id))
+            user = utils.get(ctx.guild.members, id=int(id))
 
             if not user:
                 try:
-                    user = await self.bot.fetch_user(int(id))
+                    user = await self.bot.get_or_fetch_user(int(id))
                 except NotFound:
                     continue
 
             embed.add_field(
-                name=f"#{index} - {str(user)}",
+                name=f"#{index} - @{user.display_name}" + f" {user.nick if user is Member else ''}",
                 value=f"**{count}** uses",
             )
 
@@ -115,7 +118,7 @@ class Statistics(commands.Cog):
             timestamp=ctx.message.created_at
         )
 
-        embed.set_footer(text=f"Invoked by {ctx.author}", icon_url=ctx.author.display_avatar.url)
+        embed.set_footer(text=f"Invoked by @{ctx.author.display_name}", icon_url=ctx.author.display_avatar.url)
         embed.set_thumbnail(url=target.display_avatar.url)
 
         index = 1

@@ -17,14 +17,9 @@ class PretenderHelpCommand(commands.MinimalHelpCommand):
             if not signatures:
                 continue
 
-            name = cog.qualified_name if cog is not None else "Uncategorized"
+            embed.description += f"__**{cog.qualified_name if cog is not None else 'Uncategorized'}**__\n{signatures}\n"
 
-            if name == "Jishaku": # hide jishaku commands
-                continue
-
-            embed.description += f"__**{name}**__\n{signatures}\n"
-
-        embed.set_footer(text=f"Invoked by {ctx.author}", icon_url=ctx.author.display_avatar.url)
+        embed.set_footer(text=f"Invoked by @{ctx.author.display_name}", icon_url=ctx.author.display_avatar.url)
         embed.timestamp = ctx.message.created_at
 
         await ctx.message.reply(embed=embed, mention_author=False)
@@ -44,7 +39,7 @@ class PretenderHelpCommand(commands.MinimalHelpCommand):
         for command in cog.get_commands():
             embed.description += f"`{self.get_command_signature(command)}`\n"
 
-        embed.set_footer(text=f"Invoked by {ctx.author}", icon_url=ctx.author.display_avatar.url)
+        embed.set_footer(text=f"Invoked by @{ctx.author.display_name}", icon_url=ctx.author.display_avatar.url)
         embed.timestamp = ctx.message.created_at
 
         await ctx.message.reply(embed=embed, mention_author=False)
@@ -58,7 +53,7 @@ class PretenderHelpCommand(commands.MinimalHelpCommand):
             colour=Colour.blurple()
         )
 
-        embed.set_footer(text=f"Invoked by {ctx.author}", icon_url=ctx.author.display_avatar.url)
+        embed.set_footer(text=f"Invoked by @{ctx.author.display_name}", icon_url=ctx.author.display_avatar.url)
         embed.timestamp = ctx.message.created_at
 
         await ctx.message.reply(embed=embed, mention_author=False)
@@ -71,7 +66,7 @@ class PretenderHelpCommand(commands.MinimalHelpCommand):
             colour=Colour.red()
         )
 
-        embed.set_footer(text=f"Invoked by {ctx.author}", icon_url=ctx.author.display_avatar.url)
+        embed.set_footer(text=f"Invoked by @{ctx.author.display_name}", icon_url=ctx.author.display_avatar.url)
         embed.timestamp = ctx.message.created_at
 
         return embed
