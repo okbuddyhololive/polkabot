@@ -1,5 +1,5 @@
-discord.py==1.7.3
+py-cord ==1.7.3
 python-dotenv==1.0.0
 tomli==2.0.1
 markovify==0.9.4
-motor==3.1.2
+motor==3.2.0
