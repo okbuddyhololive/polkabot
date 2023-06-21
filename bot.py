@@ -43,10 +43,9 @@ client = motor.AsyncIOMotorClient(os.getenv("MONGODB_CONNECTION_URI"))
 bot.database = client.get_default_database("pretender")
 
 # import all cogs
-bot.load_extension("cogs.impersonation")
-bot.load_extension("cogs.statistics")
-bot.load_extension("cogs.opting")
-bot.load_extension("cogs.events")
+for name in os.listdir("cogs"):
+    if name.endswith(".py"):
+        bot.load_extension(f"cogs.{name[:-3]}")
 
 # apply cooldowns to commands
 apply_cooldowns(bot.config["Cooldowns"]["Durations"], bot.commands)
