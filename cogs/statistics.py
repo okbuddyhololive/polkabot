@@ -76,11 +76,8 @@ class Statistics(commands.Cog):
             if user.id == ctx.author.id:
                 author_encountered = True
 
-            name = f"@{user.display_name}" if user.discriminator == "0" else str(user)
-            nick = f" ({user.nick})" if hasattr(user, "nick") else ""
-
             embed.add_field(
-                name=f"#{index} - {name + nick}",
+                name=f"#{index} - {f'@{user.display_name}' if user.discriminator == '0' else str(user)}",
                 value=f"**{count}** uses",
             )
 
@@ -94,7 +91,7 @@ class Statistics(commands.Cog):
             count = occurences[str(ctx.author.id)]
 
             embed.add_field(
-                name=f"#{position} - @{ctx.author.display_name} (you)",
+                name=f"#{position} - @{ctx.author.display_name} (You)",
                 value=f"**{count}** uses",
             )
 
