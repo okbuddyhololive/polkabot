@@ -50,7 +50,8 @@ class Statistics(commands.Cog):
 
             occurences[author] += text.count(keyword)
 
-        # sorting it by the most number of occurences
+        # sort the dictionary by name and then by count
+        occurences = dict(sorted(occurences.items(), key=lambda occurence: occurence[0]))
         occurences = dict(sorted(occurences.items(), key=lambda occurence: occurence[1], reverse=True))
 
         embed = Embed(
@@ -58,8 +59,9 @@ class Statistics(commands.Cog):
             colour=Colour.blurple(),
             timestamp=ctx.message.created_at
         )
-
         embed.set_footer(text=f"Invoked by @{ctx.author.display_name}", icon_url=ctx.author.display_avatar.url)
+        
+        author_encountered = False
         index = 1
 
         for id, count in occurences.items():
@@ -70,9 +72,15 @@ class Statistics(commands.Cog):
                     user = await self.bot.get_or_fetch_user(int(id))
                 except NotFound:
                     continue
+            
+            if user.id == ctx.author.id:
+                author_encountered = True
+
+            name = f"@{user.display_name}" if user.discriminator == "0" else str(user)
+            nick = f" ({user.nick})" if hasattr(user, "nick") else ""
 
             embed.add_field(
-                name=f"#{index} - @{user.display_name}" + f" {user.nick if user is Member else ''}",
+                name=f"#{index} - {name + nick}",
                 value=f"**{count}** uses",
             )
 
@@ -80,6 +88,15 @@ class Statistics(commands.Cog):
                 break
 
             index += 1
+
+        if not author_encountered:
+            position = list(occurences.keys()).index(str(ctx.author.id)) + 1
+            count = occurences[str(ctx.author.id)]
+
+            embed.add_field(
+                name=f"#{position} - @{ctx.author.display_name}",
+                value=f"**{count}** uses",
+            )
 
         await ctx.message.reply(embed=embed, mention_author=False)
 
