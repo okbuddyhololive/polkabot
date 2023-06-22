@@ -9,7 +9,7 @@ class Other(commands.Cog):
         self.bot = bot
 
         self.messages = messages
-        self.messages.max_limit = 25000
+        self.messages.max_limit = 50000
 
         self.image_extensions = tuple(self.bot.config["Commands"]["Other"]["image_extensions"])
         #self.video_extensions = tuple(self.bot.config["Commands"]["Other"]["video_extensions"])
