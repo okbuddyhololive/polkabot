@@ -50,8 +50,8 @@ class Other(commands.Cog):
         await session.close()
         await ctx.message.remove_reaction("⏲️", ctx.me)
 
-        #await ctx.message.reply(f"Here's a random image for you! {link}\nIf it's not showing up an embed, it's most likely because it isn't available anymore.", mention_author=False)
-        await ctx.message.reply(link, mention_author=False)
+        await ctx.message.reply(f"Here's a random image for you! {link}\nIf it's not showing up an embed, it's most likely because it isn't available anymore.", mention_author=False)
+        #await ctx.message.reply(link, mention_author=False)
 
     """
     @commands.command()
