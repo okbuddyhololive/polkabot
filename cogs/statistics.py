@@ -94,7 +94,7 @@ class Statistics(commands.Cog):
             count = occurences[str(ctx.author.id)]
 
             embed.add_field(
-                name=f"#{position} - @{ctx.author.display_name}",
+                name=f"#{position} - @{ctx.author.display_name} (you)",
                 value=f"**{count}** uses",
             )
 
