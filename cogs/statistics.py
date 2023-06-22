@@ -34,10 +34,12 @@ class Statistics(commands.Cog):
         - `keyword`: The keyword to search for.
         """
 
-        occurences = {}
+        await ctx.message.add_reaction("✅")
 
         async with ctx.typing():
             messages = await self.messages.containing(keyword)
+
+        occurences = {}
 
         for message in messages:
             text = message.get("content")
@@ -105,6 +107,8 @@ class Statistics(commands.Cog):
         **Arguments:**
         - `target`: The user that will be analyzed.
         """
+
+        await ctx.message.add_reaction("✅")
 
         target = target or ctx.author
         occurences = {}

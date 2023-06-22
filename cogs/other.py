@@ -25,6 +25,8 @@ class Other(commands.Cog):
         None.
         """
 
+        await ctx.message.add_reaction("✅")
+
         async with ctx.typing():
             messages = await self.messages.default()
 

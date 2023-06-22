@@ -64,6 +64,8 @@ class Impersonation(commands.Cog):
 
             return await ctx.message.reply("Whoops, it seems like you have a role that is blacklisted! Sorry, but you cannot use this command!", mention_author=False)
 
+        await ctx.message.add_reaction("✅")
+
         session = aiohttp.ClientSession()
         victim = victim or ctx.author
 
