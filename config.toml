@@ -11,7 +11,7 @@ channels = [854899513642582056] # IDs of channels blocked from fetching messages
 roles = [] # IDs of roles blocked from using `pol impersonate`
 
 [Commands]
-    [Commands.Impersonate] # settings for the `pol impersonate` command
+    [Commands.Impersonate] # settings for the `pol impersonate` command (for count commands too actually)
     censored = ["nigger", "faggot", "tranny", "senzawa", "demondice"] # a list of words that will be censored in the message
 
     [Commands.Fakekick] # settings for the `pol fakekick` command
@@ -22,7 +22,7 @@ roles = [] # IDs of roles blocked from using `pol impersonate`
     content = "Sorry, this message requires an {guild.name} **GOLD** subscription to view it.\n\nTo purchase an {guild.name} **GOLD** subscription, please reply with your social credit score and physical address." # the content for the message that will be sent
     colour = [255, 0, 0] # an RGB value of the embed colour that will be sent
 
-    [Commands.User] # settings for the `pol count` command
+    [Commands.User] # settings for the `pol count` / `pol top` command
     stopwords = [ # words that will not be counted in the top 10 list
         "i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "you're", "you've", "you'll", "you'd", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "she's", "her", "hers", "herself", "it", "it's", "its", "itself", "they", "them", "their", 
         "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "that'll", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", 
@@ -32,12 +32,24 @@ roles = [] # IDs of roles blocked from using `pol impersonate`
         "wasn", "wasn't", "weren", "weren't", "won", "won't", "wouldn", "wouldn't"
     ]
 
+    [Commands.Other] # settings for the other commands
+    image_extensions = [".png", ".jpg", ".jpeg", ".webp", ".gif"] # a list of image extensions for the `pol image` command
+    #video_extensions = [".mp4", ".mov", ".mkv", ".webm"] # a list of video extensions for the `pol video` command
+    
+    pol_pot_image = "https://cdn.discordapp.com/attachments/963524275929747460/1121226843446587402/fe3.png" # a link to the image that will be sent with the `pol pot` command
+
 [Cooldowns]
     [Cooldowns.Durations] # the key is the command name, the value is the number of seconds between the specific command execution for a user
     impersonate = 5
     fakekick = 5
     gold = 5
+
     count = 10
+    top = 10
+    bottom = 10
+
+    image = 5
+    #video = 5
 
     [Cooldowns.Whitelists]
     users = [] # a list of user IDs excluded from the cooldowns
