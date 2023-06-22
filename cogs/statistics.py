@@ -79,7 +79,7 @@ class Statistics(commands.Cog):
                 author_encountered = True
 
             embed.add_field(
-                name=f"#{index} - {f'@{user.display_name}' if user.discriminator == '0' else str(user)}",
+                name=f"#{index} - {'@' + user.display_name if user.discriminator == '0' else str(user)}",
                 value=f"**{count}** uses",
             )
 

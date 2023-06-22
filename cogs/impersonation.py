@@ -77,7 +77,7 @@ class Impersonation(commands.Cog):
         await webhook.send(self.censor_bad_words(message), username=victim.name, avatar_url=victim.display_avatar.url)
         await session.close()
 
-    @commands.command(aliases=["leave"])
+    @commands.command(aliases=["leave", "bye"])
     async def fakekick(self, ctx: commands.Context, victim: Optional[User] = None):
         """
         Impersonates Saiki Koronbot, pretending the invoker (or the person the invoker specifies) has left the server,
