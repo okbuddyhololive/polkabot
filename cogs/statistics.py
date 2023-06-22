@@ -34,7 +34,7 @@ class Statistics(commands.Cog):
         - `keyword`: The keyword to search for.
         """
 
-        await ctx.message.add_reaction("✅")
+        await ctx.message.add_reaction("⏲️")
 
         async with ctx.typing():
             messages = await self.messages.containing(keyword)
@@ -97,6 +97,7 @@ class Statistics(commands.Cog):
                 value=f"**{count}** uses",
             )
 
+        await ctx.message.remove_reaction("⏲️", ctx.me)
         await ctx.message.reply(embed=embed, mention_author=False)
 
     @commands.command()
@@ -108,7 +109,7 @@ class Statistics(commands.Cog):
         - `target`: The user that will be analyzed.
         """
 
-        await ctx.message.add_reaction("✅")
+        await ctx.message.add_reaction("⏲️")
 
         target = target or ctx.author
         occurences = {}
@@ -153,6 +154,7 @@ class Statistics(commands.Cog):
 
             index += 1
 
+        await ctx.message.remove_reaction("⏲️", ctx.me)
         await ctx.message.reply(embed=embed, mention_author=False)
 
     @commands.command()
@@ -163,6 +165,8 @@ class Statistics(commands.Cog):
         **Arguments:**
         - `target`: The user that will be analyzed.
         """
+
+        await ctx.message.add_reaction("⏲️")
 
         target = target or ctx.author
         occurences = {}
@@ -207,6 +211,7 @@ class Statistics(commands.Cog):
 
             index += 1
 
+        await ctx.message.remove_reaction("⏲️", ctx.me)
         await ctx.message.reply(embed=embed, mention_author=False)
 
 def setup(bot: commands.Bot):

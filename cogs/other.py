@@ -25,7 +25,7 @@ class Other(commands.Cog):
         None.
         """
 
-        await ctx.message.add_reaction("✅")
+        await ctx.message.add_reaction("⏲️")
 
         async with ctx.typing():
             messages = await self.messages.default()
@@ -41,14 +41,15 @@ class Other(commands.Cog):
             link = link[link.find("http"):]
             link = link.replace("media.discordapp.net", "cdn.discordapp.com")
 
-            async with session.head(link) as response:
+            async with session.get(link) as response:
                 if response.status == 404:
                     continue
                 else:
                     break
 
         await session.close()
-        
+        await ctx.message.remove_reaction("⏲️", ctx.me)
+
         #await ctx.message.reply(f"Here's a random image for you! {link}\nIf it's not showing up an embed, it's most likely because it isn't available anymore.", mention_author=False)
         await ctx.message.reply(link, mention_author=False)
 
