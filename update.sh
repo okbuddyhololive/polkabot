@@ -1,7 +1,8 @@
 #!/usr/bin/bash
 
 # update the system
-sudo apt-get update && sudo apt-get upgrade -y
+sudo -S apt-get update
+sudo apt-get upgrade -y
 
 # update python packages
 python3 -m pip install -r requirements.txt --upgrade
