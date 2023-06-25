@@ -24,11 +24,18 @@ class Statistics(commands.Cog):
 
         return content.split()
 
+    def format_username(user: User) -> str:
+        if user.discriminator == "0":
+            return f"@{user.name}"
+    
+        return f"{user.name}#{user.discriminator}"
+
     # actual commands
     @commands.command()
     async def count(self, ctx: commands.Context, *, keyword: str):
         """
-        Counts the amount of messages containing a keyword and shows the Top 10 people who said it.
+        Counts the amount of messages containing a keyword and shows the 10 people who've said it the most.
+        Also includes the invoker, if they're in the top 10.
 
         **Arguments:**
         - `keyword`: The keyword to search for.
@@ -39,6 +46,7 @@ class Statistics(commands.Cog):
         async with ctx.typing():
             messages = await self.messages.containing(keyword)
 
+        keyword = keyword.lower()
         occurences = {}
 
         for message in messages:
@@ -61,8 +69,8 @@ class Statistics(commands.Cog):
             colour=Colour.blurple(),
             timestamp=ctx.message.created_at
         )
-        embed.set_footer(text=f"Invoked by @{ctx.author.display_name}", icon_url=ctx.author.display_avatar.url)
-        
+        embed.set_footer(text=f"Invoked by {self.format_username(ctx.author)}", icon_url=ctx.author.display_avatar.url)
+
         author_encountered = False
         index = 1
 
@@ -74,15 +82,18 @@ class Statistics(commands.Cog):
                     user = await self.bot.get_or_fetch_user(int(id))
                 except NotFound:
                     continue
-            
-            if user.id == ctx.author.id:
-                author_encountered = True
 
             if any(word in user.name.lower() for word in self.censored):
                 continue
 
+            field_name = f"#{index} - {self.format_username(user)}"
+
+            if user.id == ctx.author.id:
+                name += " (You)"
+                author_encountered = True
+
             embed.add_field(
-                name=f"#{index} - {'@' + user.name if user.discriminator == '0' else str(user)}",
+                name=field_name,
                 value=f"**{count}** uses",
             )
 
@@ -92,11 +103,13 @@ class Statistics(commands.Cog):
             index += 1
 
         if not author_encountered:
-            position = list(occurences.keys()).index(str(ctx.author.id)) + 1
+            leaderboard = list(occurences.keys())
+
+            position = leaderboard.index(str(ctx.author.id)) + 1
             count = occurences[str(ctx.author.id)]
 
             embed.add_field(
-                name=f"#{position} - @{ctx.author.display_name} (You)",
+                name=f"#{position} - {self.format_username(ctx.author)} (You)",
                 value=f"**{count}** uses",
             )
 
@@ -141,7 +154,7 @@ class Statistics(commands.Cog):
             timestamp=ctx.message.created_at
         )
 
-        embed.set_footer(text=f"Invoked by @{ctx.author.display_name}", icon_url=ctx.author.display_avatar.url)
+        embed.set_footer(text=f"Invoked by {self.format_username(ctx.author)}", icon_url=ctx.author.display_avatar.url)
         embed.set_thumbnail(url=target.display_avatar.url)
 
         index = 1
@@ -198,7 +211,7 @@ class Statistics(commands.Cog):
             timestamp=ctx.message.created_at
         )
 
-        embed.set_footer(text=f"Invoked by @{ctx.author.display_name}", icon_url=ctx.author.display_avatar.url)
+        embed.set_footer(text=f"Invoked by {self.format_username(ctx.author)}", icon_url=ctx.author.display_avatar.url)
         embed.set_thumbnail(url=target.display_avatar.url)
 
         index = 1
