@@ -1,23 +1,23 @@
 name: Deploying the latest version of the bot
 
 on: 
-    push:
-        branches: [main]
-    
+  push:
+    branches: [main]
+  
 jobs:
-      ssh:
-          name: Update on VPS using SSH
-          runs-on: ubuntu-latest
+  ssh:
+    name: Update on VPS using SSH
+    runs-on: ubuntu-latest
+  
+    steps:
+      - name: Run the update script
+        uses: appleboy/ssh-action@master
     
-          steps:
-              - name: Run the update script
-                uses: appleboy/ssh-action@master
-      
-                with:
-                    host: ${{ secrets.HOST }}
-                    port: ${{ secrets.PORT }}
+        with:
+          host: ${{ secrets.HOST }}
+          port: ${{ secrets.PORT }}
 
-                    username: ${{ secrets.USERNAME }}
-                    password: ${{ secrets.PASSWORD }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
 
-                    script: echo ${{ secrets.PASSWORD }} | ./project-pretender/update.sh
+          script: echo ${{ secrets.PASSWORD }} | ./project-pretender/update.sh
