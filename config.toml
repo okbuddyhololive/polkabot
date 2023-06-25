@@ -12,7 +12,7 @@ roles = [] # IDs of roles blocked from using `pol impersonate`
 
 [Commands]
     [Commands.Impersonate] # settings for the `pol impersonate` command (for count commands too actually)
-    censored = ["nigger", "faggot", "tranny", "senzawa", "demondice"] # a list of words that will be censored in the message
+    censored = ["nigger", "faggot", "tranny", "trannies", "senzawa", "demondice"] # a list of words that will be censored in the message
 
     [Commands.Fakekick] # settings for the `pol fakekick` command
     author = 804259676409167902 # a user ID of the author of a `pol fakekick` message

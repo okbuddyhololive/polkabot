@@ -78,8 +78,11 @@ class Statistics(commands.Cog):
             if user.id == ctx.author.id:
                 author_encountered = True
 
+            if any(word in user.name.lower() for word in self.censored):
+                continue
+
             embed.add_field(
-                name=f"#{index} - {'@' + user.display_name if user.discriminator == '0' else str(user)}",
+                name=f"#{index} - {'@' + user.name if user.discriminator == '0' else str(user)}",
                 value=f"**{count}** uses",
             )
 
