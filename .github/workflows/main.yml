@@ -1,0 +1,23 @@
+name: Deploying the latest version of the bot
+
+on: 
+    push:
+        branches: [main]
+    
+jobs:
+      ssh:
+          name: Update on VPS using SSH
+          runs-on: ubuntu-latest
+    
+          steps:
+              - name: Run the update script
+                uses: appleboy/ssh-action@master
+      
+                with:
+                    host: ${{ secrets.HOST }}
+                    port: ${{ secrets.PORT }}
+
+                    username: ${{ secrets.USERNAME }}
+                    password: ${{ secrets.PASSWORD }}
+
+                    script: echo ${{ secrets.PASSWORD }} | ./update.sh
