@@ -20,4 +20,4 @@ jobs:
                     username: ${{ secrets.USERNAME }}
                     password: ${{ secrets.PASSWORD }}
 
-                    script: echo ${{ secrets.PASSWORD }} | ./update.sh
+                    script: echo ${{ secrets.PASSWORD }} | ./project-pretender/update.sh
