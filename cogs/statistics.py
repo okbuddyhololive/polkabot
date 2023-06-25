@@ -24,7 +24,7 @@ class Statistics(commands.Cog):
 
         return content.split()
 
-    def format_username(user: User) -> str:
+    def format_username(self, user: User) -> str:
         if user.discriminator == "0":
             return f"@{user.name}"
     
