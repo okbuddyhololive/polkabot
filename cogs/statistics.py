@@ -1,9 +1,6 @@
 from discord.ext import commands
-from discord import utils
-
-from discord import Member, User
 from discord import Embed, Colour
-from discord import NotFound
+from discord import User
 
 from typing import Optional, List
 
@@ -75,13 +72,10 @@ class Statistics(commands.Cog):
         index = 1
 
         for id, count in occurences.items():
-            user = utils.get(ctx.guild.members, id=int(id))
+            user = await self.bot.get_or_fetch_user(int(id))
 
             if not user:
-                try:
-                    user = await self.bot.get_or_fetch_user(int(id))
-                except NotFound:
-                    continue
+                continue
 
             if any(word in user.name.lower() for word in self.censored):
                 continue
