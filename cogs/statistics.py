@@ -89,7 +89,7 @@ class Statistics(commands.Cog):
             field_name = f"#{index} - {self.format_username(user)}"
 
             if user.id == ctx.author.id:
-                name += " (You)"
+                field_name += " (You)"
                 author_encountered = True
 
             embed.add_field(
