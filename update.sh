@@ -1,8 +1,7 @@
 #!/usr/bin/bash
 
 # update the system
-sudo -S apt-get update
-sudo apt-get upgrade -y
+sudo -S apt-get update && sudo apt-get upgrade -y
 
 # move into the polkabot directory
 cd ~/project-pretender
