@@ -28,21 +28,17 @@ class Other(commands.Cog):
         await ctx.message.add_reaction("⏲️")
 
         async with ctx.typing():
-            messages = await self.messages.default()
+            messages = await self.messages.links()
 
-        messages = [message.get("content", "") for message in messages]
-        messages = [message for message in messages if message.endswith(self.image_extensions)]
-
+        messages = [message["image"]["match"] for message in messages]
         session = aiohttp.ClientSession()
 
         while True:
             link = random.choice(messages)
-
-            link = link[link.find("http"):]
             link = link.replace("media.discordapp.net", "cdn.discordapp.com")
 
-            async with session.get(link) as response:
-                if response.status == 404:
+            async with session.head(link) as response:
+                if response.status >= 400:
                     continue
                 else:
                     break
@@ -50,8 +46,8 @@ class Other(commands.Cog):
         await session.close()
         await ctx.message.remove_reaction("⏲️", ctx.me)
 
-        await ctx.message.reply(f"Here's a random image for you! {link}\nIf it's not showing up an embed, it's most likely because it isn't available anymore.", mention_author=False)
-        #await ctx.message.reply(link, mention_author=False)
+        #await ctx.message.reply(f"Here's a random image for you! {link}\nIf it's not showing up an embed, it's most likely because it isn't available anymore.", mention_author=False)
+        await ctx.message.reply(link, mention_author=False)
 
     """
     @commands.command()

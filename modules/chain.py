@@ -5,6 +5,8 @@ import markovify
 from typing import Dict, List, Union
 import re
 
+URL_PATTERN = r"\bhttps?:\/\/\S+\.(?:png|jpe?g|gif|webp)\b"
+
 class MessageManager:
     def __init__(self, database: AsyncIOMotorDatabase, min_limit: int = 1_000, max_limit: int = 25_000, length: int = 200, tries: int = 100):
         self.collection = database.messages
@@ -25,6 +27,29 @@ class MessageManager:
 
         return await cursor.to_list(length=self.max_limit)
 
+    async def links(self) -> List[Dict]:
+        cursor = self.collection.aggregate([
+            {
+                "$set": {
+                    "image": {
+                        "$regexFind": {
+                            "input": "$content", 
+                            "regex": URL_PATTERN,
+                            "options": "i"
+                        }
+                    }
+                }
+            }, {
+                "$match": {
+                    "image": {
+                        "$ne": None
+                    }
+                }
+            }
+        ])
+
+        return await cursor.to_list(length=None)
+
     async def containing(self, keyword: str) -> List[Dict]:
         pattern = re.escape(keyword)
         pattern = re.compile(pattern, re.IGNORECASE)
@@ -43,8 +68,7 @@ class MessageManager:
         return await self.collection.delete_many({"author": {"id": str(author.id)}})
 
     async def generate(self, author: Union[Member, User]) -> str:
-        cursor = self.collection.find({"author": {"id": str(author.id)}})
-        dataset = await cursor.to_list(length=self.max_limit)
+        dataset = await self.get(author)
 
         if not dataset or len(dataset) < self.min_limit:
             dataset = await self.default()
