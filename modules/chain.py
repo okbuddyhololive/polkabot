@@ -5,8 +5,6 @@ import markovify
 from typing import Dict, List, Union
 import re
 
-URL_PATTERN = r"\bhttps?:\/\/\S+\.(?:png|jpe?g|gif|webp)\b"
-
 class MessageManager:
     def __init__(self, database: AsyncIOMotorDatabase, min_limit: int = 1_000, max_limit: int = 25_000, length: int = 200, tries: int = 100):
         self.collection = database.messages
@@ -34,7 +32,7 @@ class MessageManager:
                     "image": {
                         "$regexFind": {
                             "input": "$content", 
-                            "regex": URL_PATTERN,
+                            "regex": r"\bhttps?:\/\/\S+\.(?:png|jpe?g|gif|webp)\b",
                             "options": "i"
                         }
                     }

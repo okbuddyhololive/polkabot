@@ -3,28 +3,40 @@ from discord import Embed, Colour
 from discord import User
 
 from typing import Optional, List
+import re
 
 from modules.chain import MessageManager
 
 class Statistics(commands.Cog):
     def __init__(self, bot: commands.Bot, messages: MessageManager):
         self.bot = bot
-
         self.messages = messages
+
         self.stopwords = self.bot.config["Commands"]["User"]["stopwords"]
         self.censored = self.bot.config["Commands"]["Impersonate"]["censored"]
 
+        self.pattern = re.compile(r"(https?:\/\/\S+)|(<a?:\w+:\d+>)", re.IGNORECASE)
+
     # helper functions
     def word_split(self, text: str) -> List[str]:
-        content = text.strip().lower()
-        content = content.translate(str.maketrans("", "", "!\"#$%&'()*+,-./:;<=>?[\\]^_`{|}~"))
+        content = text.strip()
+        content = content.lower()
 
-        return content.split()
+        words = content.split()
+        filtered = []
+
+        for word in words:
+            if self.pattern.match(word):
+                continue
+
+            filtered.append(word.translate(str.maketrans("", "", "!\"#$%&'()*+,-./:;<=>?[\\]^_`{|}~")))
+
+        return filtered
 
     def format_username(self, user: User) -> str:
         if user.discriminator == "0":
             return f"@{user.name}"
-    
+
         return f"{user.name}#{user.discriminator}"
 
     # actual commands
