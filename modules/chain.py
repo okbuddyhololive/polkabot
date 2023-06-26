@@ -25,21 +25,22 @@ class MessageManager:
 
         return await cursor.to_list(length=self.max_limit)
 
-    async def links(self) -> List[Dict]:
+    async def links(self, extensions: List[str]) -> List[Dict]:
         cursor = self.collection.aggregate([
             {
-                "$set": {
-                    "image": {
+                "$project": {
+                    "url": {
                         "$regexFind": {
                             "input": "$content", 
-                            "regex": r"\bhttps?:\/\/\S+\.(?:png|jpe?g|gif|webp)\b",
+                            "regex": rf"\bhttps?:\/\/\S+\.(?:{'|'.join(extensions)})\b",
                             "options": "i"
                         }
                     }
                 }
-            }, {
+            }, 
+            {
                 "$match": {
-                    "image": {
+                    "url": {
                         "$ne": None
                     }
                 }
