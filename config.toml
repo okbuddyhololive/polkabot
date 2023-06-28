@@ -48,8 +48,8 @@ roles = [] # IDs of roles blocked from using `pol impersonate`
     top = 10
     bottom = 10
 
-    image = 10
-    video = 10
+    image = 30
+    video = 30
 
     [Cooldowns.Whitelists]
     users = [] # a list of user IDs excluded from the cooldowns
