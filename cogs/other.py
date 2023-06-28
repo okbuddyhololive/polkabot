@@ -1,7 +1,8 @@
 from modules.chain import MessageManager
-from discord.ext import commands
+from discord.ext import commands, tasks
 import aiohttp
 
+import logging
 import random
 
 class Other(commands.Cog):
@@ -11,10 +12,25 @@ class Other(commands.Cog):
         self.messages = messages
         self.messages.max_limit = 50000
 
-        self.image_extensions = self.bot.config["Commands"]["Other"]["image_extensions"]
-        self.video_extensions = self.bot.config["Commands"]["Other"]["video_extensions"]
-
         self.pol_pot = self.bot.config["Commands"]["Other"]["pol_pot_image"]
+
+        self.images = []
+        self.videos = []
+
+        self.update_links.start()
+
+    @tasks.loop(hours=1)
+    async def update_links(self):
+        image_extensions = self.bot.config["Commands"]["Other"]["image_extensions"]
+        video_extensions = self.bot.config["Commands"]["Other"]["video_extensions"]
+
+        image_matches = await self.messages.links(image_extensions)
+        video_matches = await self.messages.links(video_extensions)
+
+        self.images = [message["url"]["match"] for message in image_matches]
+        self.videos = [message["url"]["match"] for message in video_matches]
+
+        logging.info(f"Updated links. Found {len(self.images)} images and {len(self.videos)} videos.")
 
     @commands.command()
     async def image(self, ctx: commands.Context):
@@ -25,25 +41,25 @@ class Other(commands.Cog):
         None.
         """
 
+        if not self.images:
+            return await ctx.message.reply("I didn't prepare the image links yet, please try again in a minute!", mention_author=False)
+
         await ctx.message.add_reaction("⏲️")
 
         async with ctx.typing():
-            messages = await self.messages.links(self.image_extensions)
+            session = aiohttp.ClientSession()
 
-        messages = [message["url"]["match"] for message in messages]
-        session = aiohttp.ClientSession()
+            while True:
+                link = random.choice(self.images)
 
-        while True:
-            link = random.choice(messages)
-            link = link.replace("media.discordapp.net", "cdn.discordapp.com")
+                async with session.head(link) as response:
+                    if response.status >= 400:
+                        continue
+                    else:
+                        break
 
-            async with session.head(link) as response:
-                if response.status >= 400:
-                    continue
-                else:
-                    break
+            await session.close()
 
-        await session.close()
         await ctx.message.remove_reaction("⏲️", ctx.me)
 
         #await ctx.message.reply(f"Here's a random image for you! {link}\nIf it's not showing up an embed, it's most likely because it isn't available anymore.", mention_author=False)
@@ -58,28 +74,28 @@ class Other(commands.Cog):
         None.
         """
 
+        if not self.videos:
+            return await ctx.message.reply("I didn't prepare the video links yet, please try again in a minute!", mention_author=False)
+
         await ctx.message.add_reaction("⏲️")
 
         async with ctx.typing():
-            messages = await self.messages.links(self.video_extensions)
+            session = aiohttp.ClientSession()
 
-        messages = [message["url"]["match"] for message in messages]
-        session = aiohttp.ClientSession()
+            while True:
+                link = random.choice(self.videos)
 
-        while True:
-            link = random.choice(messages)
-            link = link.replace("media.discordapp.net", "cdn.discordapp.com")
+                async with session.head(link) as response:
+                    if response.status >= 400:
+                        continue
+                    else:
+                        break
 
-            async with session.head(link) as response:
-                if response.status >= 400:
-                    continue
-                else:
-                    break
+            await session.close()
 
-        await session.close()
         await ctx.message.remove_reaction("⏲️", ctx.me)
 
-        #await ctx.message.reply(f"Here's a random image for you! {link}\nIf it's not showing up an embed, it's most likely because it isn't available anymore.", mention_author=False)
+        #await ctx.message.reply(f"Here's a random video for you! {link}\nIf it's not showing up an embed, it's most likely because it isn't available anymore.", mention_author=False)
         await ctx.message.reply(link, mention_author=False)
 
     @commands.command()
