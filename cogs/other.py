@@ -44,8 +44,6 @@ class Other(commands.Cog):
         if not self.images:
             return await ctx.message.reply("I didn't prepare the image links yet, please try again in a minute!", mention_author=False)
 
-        await ctx.message.add_reaction("⏲️")
-
         async with ctx.typing():
             session = aiohttp.ClientSession()
 
@@ -59,8 +57,6 @@ class Other(commands.Cog):
                         break
 
             await session.close()
-
-        await ctx.message.remove_reaction("⏲️", ctx.me)
 
         #await ctx.message.reply(f"Here's a random image for you! {link}\nIf it's not showing up an embed, it's most likely because it isn't available anymore.", mention_author=False)
         await ctx.message.reply(link, mention_author=False)
@@ -77,8 +73,6 @@ class Other(commands.Cog):
         if not self.videos:
             return await ctx.message.reply("I didn't prepare the video links yet, please try again in a minute!", mention_author=False)
 
-        await ctx.message.add_reaction("⏲️")
-
         async with ctx.typing():
             session = aiohttp.ClientSession()
 
@@ -92,8 +86,6 @@ class Other(commands.Cog):
                         break
 
             await session.close()
-
-        await ctx.message.remove_reaction("⏲️", ctx.me)
 
         #await ctx.message.reply(f"Here's a random video for you! {link}\nIf it's not showing up an embed, it's most likely because it isn't available anymore.", mention_author=False)
         await ctx.message.reply(link, mention_author=False)

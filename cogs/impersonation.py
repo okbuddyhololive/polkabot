@@ -64,12 +64,15 @@ class Impersonation(commands.Cog):
 
             return await ctx.message.reply("Whoops, it seems like you have a role that is blacklisted! Sorry, but you cannot use this command!", mention_author=False)
 
+        await ctx.message.add_reaction("⏲️")
+
         session = aiohttp.ClientSession()
         victim = victim or ctx.author
 
         message = await self.messages.generate(victim)
         webhook = await self.webhooks.get(ctx.channel, session=session)
 
+        await ctx.message.remove_reaction("⏲️", ctx.me)
         await ctx.message.delete()
 
         await webhook.send(self.censor_bad_words(message), username=victim.name, avatar_url=victim.display_avatar.url)

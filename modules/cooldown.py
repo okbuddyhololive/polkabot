@@ -6,7 +6,7 @@ from typing import Set
 
 def apply_cooldowns(cooldowns: dict, commands: Set[Command]):
     for name, value in cooldowns.items():
-        cooldown_decorator(rate=1, per=value, type=BucketType.user)(utils.get(commands, name=name))
+        cooldown_decorator(rate=1, per=value, type=BucketType.channel)(utils.get(commands, name=name))
 
 def is_whitelisted(ctx: Context, whitelists: dict) -> bool:
     if ctx.author.id in whitelists["users"]:
