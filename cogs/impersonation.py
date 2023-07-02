@@ -49,30 +49,39 @@ class Impersonation(commands.Cog):
 
     # actual commands here
     @commands.command()
-    async def impersonate(self, ctx: commands.Context, victim: Optional[User] = None):
+    async def impersonate(self, ctx: commands.Context, victim: Optional[User] = None, *, content: Optional[str] = None):
         """
         Impersonates the invoker (or the person you specify), based on their messages that were collected.
         If the user has opted out of message collecting, it will be based on all messages in the database.
+        The invoker can also specify a message to send, which will be used instead of the generated message.
 
         **Arguments:**
         - `victim`: The user to impersonate, is optional.
+        - `content`: The message to send, is optional.
         """
 
         for role in ctx.author.roles:
             if role.id not in self.bot.config["Blacklists"]["roles"]:
                 continue
 
+            if not content:
+                break
+
             return await ctx.message.reply("Whoops, it seems like you have a role that is blacklisted! Sorry, but you cannot use this command!", mention_author=False)
 
-        await ctx.message.add_reaction("⏲️")
+        if not content:
+            await ctx.message.add_reaction("⏲️")
 
         session = aiohttp.ClientSession()
-        victim = victim or ctx.author
 
-        message = await self.messages.generate(victim)
+        victim = victim or ctx.author
+        message = content or await self.messages.generate(victim)
+
         webhook = await self.webhooks.get(ctx.channel, session=session)
 
-        await ctx.message.remove_reaction("⏲️", ctx.me)
+        if not content:
+            await ctx.message.remove_reaction("⏲️", ctx.me)
+
         await ctx.message.delete()
 
         await webhook.send(self.censor_bad_words(message), username=victim.name, avatar_url=victim.display_avatar.url)

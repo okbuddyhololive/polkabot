@@ -8,7 +8,7 @@ tries = 100 # amount of tries to generate a message
 
 [Blacklists]
 channels = [854899513642582056] # IDs of channels blocked from fetching messages from them
-roles = [] # IDs of roles blocked from using `pol impersonate`
+roles = [1086894336437919835] # IDs of roles blocked from using `pol impersonate`
 
 [Commands]
     [Commands.Impersonate] # settings for the `pol impersonate` command (for count commands too actually)
