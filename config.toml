@@ -36,8 +36,6 @@ roles = [1086894336437919835] # IDs of roles blocked from using `pol impersonate
     image_extensions = ["png", "jpg", "jpeg", "webp", "gif"] # a list of image extensions for the `pol image` command
     video_extensions = ["mp4", "mov", "mkv", "webm"] # a list of video extensions for the `pol video` command
 
-    pol_pot_image = "https://cdn.discordapp.com/attachments/963524275929747460/1121226843446587402/fe3.png" # a link to the image that will be sent with the `pol pot` command
-
 [Cooldowns]
     [Cooldowns.Durations] # the key is the command name, the value is the number of seconds between the specific command execution for a user
     impersonate = 5

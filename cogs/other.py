@@ -12,8 +12,6 @@ class Other(commands.Cog):
         self.messages = messages
         self.messages.max_limit = 50000
 
-        self.pol_pot = self.bot.config["Commands"]["Other"]["pol_pot_image"]
-
         self.images = []
         self.videos = []
 
@@ -100,7 +98,10 @@ class Other(commands.Cog):
         None.
         """
 
-        await ctx.message.reply(self.pol_pot, mention_author=True)
+        if random.randint(1, 100) <= 1:
+            await ctx.message.reply("https://cdn.discordapp.com/attachments/963524275929747460/1125083804990701578/pot-stainless-steel.png", mention_author=True)
+        else:
+            await ctx.message.reply("https://cdn.discordapp.com/attachments/963524275929747460/1121226843446587402/fe3.png", mention_author=True)
 
 def setup(bot: commands.Bot):
     bot.add_cog(Other(bot, 
