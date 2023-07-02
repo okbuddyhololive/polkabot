@@ -28,8 +28,11 @@ class Statistics(commands.Cog):
         for word in words:
             if self.pattern.match(word):
                 continue
+            
+            word = word.translate(str.maketrans("", "", "!\"#$%&'()*+,-./:;<=>?[\\]^_`{|}~"))
 
-            filtered.append(word.translate(str.maketrans("", "", "!\"#$%&'()*+,-./:;<=>?[\\]^_`{|}~")))
+            if word:
+                filtered.append(word)
 
         return filtered
 
