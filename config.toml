@@ -16,7 +16,7 @@ roles = [1086894336437919835] # IDs of roles blocked from using `pol impersonate
 
     [Commands.Fakekick] # settings for the `pol fakekick` command
     author = 804259676409167902 # a user ID of the author of a `pol fakekick` message
-    content = "bye retard {user.name}#{user.discriminator}  # **{user.id}** https://tenor.com/view/watame-ripbozo-packwatch-restinpiss-gif-21991440" # the content for the message that will be sent with the `pol fakekick` command
+    content = "bye retard {user.name} # **{user.id}** https://tenor.com/view/watame-ripbozo-packwatch-restinpiss-gif-21991440" # the content for the message that will be sent with the `pol fakekick` command
 
     [Commands.Gold] # settings for the `pol gold` command
     content = "Sorry, this message requires the {guild.name} **GOLD** subscription to view it.\n\nTo purchase an {guild.name} **GOLD** subscription, please reply with your social credit score and physical address." # the content for the message that will be sent
