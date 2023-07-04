@@ -84,7 +84,7 @@ class Impersonation(commands.Cog):
 
         await ctx.message.delete()
 
-        await webhook.send(self.censor_bad_words(message), username=victim.name, avatar_url=victim.display_avatar.url)
+        await webhook.send(self.censor_bad_words(message), username=victim.display_name, avatar_url=victim.display_avatar.url)
         await session.close()
 
     @commands.command(aliases=["leave", "bye"])
