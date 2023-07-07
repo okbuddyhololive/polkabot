@@ -12,24 +12,43 @@ class Statistics(commands.Cog):
         self.bot = bot
         self.messages = messages
 
-        self.stopwords = self.bot.config["Commands"]["User"]["stopwords"]
-        self.censored = self.bot.config["Commands"]["Impersonate"]["censored"]
+        with open(self.bot.config["Commands"]["User"]["stopwords_path"], "r", encoding="utf-8") as file:
+            self.stopwords = [word.rstrip("\n") for word in file.readlines()]
+        
+        with open(self.bot.config["Commands"]["User"]["blacklist_path"], "r", encoding="utf-8") as file:
+            self.censored = [word.rstrip("\n") for word in file.readlines()]
 
         self.pattern = re.compile(r"(https?:\/\/\S+)|(<a?:\w+:\d+>)", re.IGNORECASE)
+        self.punctuation = (".", ",", "!", "?", ":", ";", "'", "\"", "(", ")", "[", "]", "{", "}", "-", "_", "+", "=", "/", "\\", "|", "<", ">", "@", "#", "$", "%", "^", "&", "*", "~", "`")
 
     # helper functions
-    def word_split(self, text: str) -> List[str]:
-        content = text.strip()
-        content = content.lower()
+    def remove_punctuation(self, word: str) -> str:
+        result = word
 
+        if result.startswith(self.punctuation):
+            result = result[1:]
+
+        if result.endswith(self.punctuation):
+            result = result[:-1]
+
+        return result
+
+    def word_split(self, text: str) -> List[str]:
+        if not text:
+            return []
+
+        content = text.strip()
+
+        content = content.lower()
         words = content.split()
+
         filtered = []
 
         for word in words:
             if self.pattern.match(word):
                 continue
             
-            word = word.translate(str.maketrans("", "", "!\"#$%&'()*+,-./:;<=>?[\\]^_`{|}~"))
+            word = self.remove_punctuation(word)
 
             if word:
                 filtered.append(word)
@@ -63,8 +82,8 @@ class Statistics(commands.Cog):
 
         for message in messages:
             text = message.get("content")
+            
             text = text.lower()
-
             author = message["author"]["id"]
 
             if author not in occurences:
@@ -143,11 +162,8 @@ class Statistics(commands.Cog):
             messages = await self.messages.get(target)
 
         for message in messages:
-            for word in self.word_split(message.get("content", "")):
+            for word in self.word_split(message.get("content")):
                 if word in self.stopwords + self.censored:
-                    continue
-
-                if word.startswith("http") or word.endswith("www"):
                     continue
 
                 if word not in occurences:
@@ -202,9 +218,6 @@ class Statistics(commands.Cog):
         for message in messages:
             for word in self.word_split(message.get("content", "")):
                 if word in self.stopwords + self.censored:
-                    continue
-
-                if word.startswith("http") or word.endswith("www"):
                     continue
 
                 if word not in occurences:

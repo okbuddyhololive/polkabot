@@ -11,9 +11,6 @@ channels = [854899513642582056] # IDs of channels blocked from fetching messages
 roles = [1086894336437919835] # IDs of roles blocked from using `pol impersonate`
 
 [Commands]
-    [Commands.Impersonate] # settings for the `pol impersonate` command (for count commands too actually)
-    censored = ["nigger", "faggot", "tranny", "trannies", "senzawa", "demondice"] # a list of words that will be censored in the message
-
     [Commands.Fakekick] # settings for the `pol fakekick` command
     author = 804259676409167902 # a user ID of the author of a `pol fakekick` message
     content = "bye retard {user.name} # **{user.id}** https://tenor.com/view/watame-ripbozo-packwatch-restinpiss-gif-21991440" # the content for the message that will be sent with the `pol fakekick` command
@@ -23,14 +20,8 @@ roles = [1086894336437919835] # IDs of roles blocked from using `pol impersonate
     colour = [255, 0, 0] # an RGB value of the embed colour that will be sent
 
     [Commands.User] # settings for the `pol count` / `pol top` command
-    stopwords = [ # words that will not be counted in the top 10 list
-        "i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "you're", "you've", "you'll", "you'd", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "she's", "her", "hers", "herself", "it", "it's", "its", "itself", "they", "them", "their", 
-        "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "that'll", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", 
-        "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above",  "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", 
-        "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "don't", "should", "should've", "now", "d", "ll", "m", "o", "re", 
-        "ve", "y", "ain", "aren", "aren't", "couldn", "couldn't", "didn", "didn't", "doesn", "doesn't", "hadn", "hadn't", "hasn", "hasn't", "haven", "haven't", "isn", "isn't", "ma", "mightn", "mightn't", "mustn", "mustn't", "needn", "needn't", "shan", "shan't", "shouldn", "shouldn't", 
-        "wasn", "wasn't", "weren", "weren't", "won", "won't", "wouldn", "wouldn't"
-    ]
+    blacklist_path = "assets/blacklist.txt" # path to the file with censored words
+    stopwords_path = "assets/stopwords.txt" # path to the file with words that will not be counted
 
     [Commands.Other] # settings for the other commands
     image_extensions = ["png", "jpg", "jpeg", "webp", "gif"] # a list of image extensions for the `pol image` command

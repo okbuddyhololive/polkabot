@@ -18,11 +18,14 @@ class Impersonation(commands.Cog):
         self.webhooks = webhooks
         self.blacklist = blacklist
 
+        with open(self.bot.config["Commands"]["User"]["blacklist_path"], "r", encoding="utf-8") as file:
+            self.censored = [word.rstrip("\n") for word in file.readlines()]
+
     # helper functions
     def censor_bad_words(self, text: str) -> str:
         censored_text = text
 
-        for word in self.bot.config["Commands"]["Impersonate"]["censored"]:
+        for word in self.censored:
             if word not in censored_text:
                 continue
 
