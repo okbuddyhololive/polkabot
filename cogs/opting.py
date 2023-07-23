@@ -62,5 +62,5 @@ class Opting(commands.Cog):
 def setup(bot: commands.Bot):
     bot.add_cog(Opting(bot=bot,
         messages=MessageManager(bot.database, **bot.config["Chain"]), 
-        blacklist=bot.database.refusers
+        blacklist=bot.database.optOutUsers
     ))

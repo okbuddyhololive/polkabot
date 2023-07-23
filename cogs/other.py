@@ -1,15 +1,20 @@
-from modules.chain import MessageManager
+from motor.motor_asyncio import AsyncIOMotorCollection
 from discord.ext import commands, tasks
+from discord import Message
 import aiohttp
 
 import logging
 import random
 
+from modules.chain import MessageManager
+
 class Other(commands.Cog):
-    def __init__(self, bot: commands.Bot, messages: MessageManager):
+    def __init__(self, bot: commands.Bot, messages: MessageManager, blacklist: AsyncIOMotorCollection):
         self.bot = bot
 
         self.messages = messages
+        self.blacklist = blacklist
+
         self.messages.max_limit = 50000
 
         self.images = []
@@ -17,16 +22,35 @@ class Other(commands.Cog):
 
         self.update_links.start()
 
+    @commands.Cog.listener()
+    async def on_message_delete(self, message: Message):
+        if message.author != self.bot.user:
+            return
+
+        if not message.reference or not message.reference.resolved:
+            return
+        
+        reply = message.reference.resolved
+        prefix = self.bot.config["prefix"]
+
+        if reply.content not in (prefix + "image", prefix + "video"):
+            return
+        
+        await self.blacklist.insert_one({"url": message.content})
+
     @tasks.loop(hours=1)
     async def update_links(self):
+        cursor = self.blacklist.find({})
+        banned_links = [document["url"] for document in await cursor.to_list(length=None)]
+
         image_extensions = self.bot.config["Commands"]["Other"]["image_extensions"]
         video_extensions = self.bot.config["Commands"]["Other"]["video_extensions"]
 
         image_matches = await self.messages.links(image_extensions)
         video_matches = await self.messages.links(video_extensions)
 
-        self.images = [message["url"]["match"] for message in image_matches]
-        self.videos = [message["url"]["match"] for message in video_matches]
+        self.images = [message["url"]["match"] for message in image_matches if message["url"]["match"] not in banned_links]
+        self.videos = [message["url"]["match"] for message in video_matches if message["url"]["match"] not in banned_links]
 
         logging.info(f"Updated links. Found {len(self.images)} images and {len(self.videos)} videos.")
 
@@ -105,5 +129,6 @@ class Other(commands.Cog):
 
 def setup(bot: commands.Bot):
     bot.add_cog(Other(bot, 
-        messages=MessageManager(bot.database, **bot.config["Chain"])
+        messages=MessageManager(bot.database, **bot.config["Chain"]),
+        blacklist=bot.database.bannedLinks
     ))
