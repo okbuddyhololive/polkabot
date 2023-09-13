@@ -21,7 +21,7 @@ class Events(commands.Cog):
             return
 
         if isinstance(error, commands.CommandOnCooldown):
-            if is_whitelisted(ctx, self.bot.config["Cooldowns"]["Whitelists"]):
+            if is_whitelisted(ctx, self.bot.config["Cooldowns"]["Whitelist"]):
                 return ctx.command.reset_cooldown(ctx)
 
             return await ctx.send(f"You're on cooldown, {ctx.author.mention}. Please try again in {round(error.retry_after, 2)} seconds.")

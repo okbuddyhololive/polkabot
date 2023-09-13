@@ -63,6 +63,12 @@ class Other(commands.Cog):
         None.
         """
 
+        for role in getattr(ctx.author, "roles", []):
+            if role.id not in self.bot.config["Blacklist"]["roles"]:
+                continue
+
+            return await ctx.message.reply(self.bot.config["Blacklist"]["message"], mention_author=False)
+
         if not self.images:
             return await ctx.message.reply("I didn't prepare the image links yet, please try again in a minute!", mention_author=False)
 
@@ -91,6 +97,12 @@ class Other(commands.Cog):
         **Arguments:**
         None.
         """
+
+        for role in getattr(ctx.author, "roles", []):
+            if role.id not in self.bot.config["Blacklist"]["roles"]:
+                continue
+
+            return await ctx.message.reply(self.bot.config["Blacklist"]["message"], mention_author=False)
 
         if not self.videos:
             return await ctx.message.reply("I didn't prepare the video links yet, please try again in a minute!", mention_author=False)

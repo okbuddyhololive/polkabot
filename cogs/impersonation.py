@@ -42,7 +42,7 @@ class Impersonation(commands.Cog):
         if not message.clean_content:
             return
 
-        if message.channel.id in self.bot.config["Blacklists"]["channels"]:
+        if message.channel.id in self.bot.config["Blacklist"]["channels"]:
             return
 
         if await self.blacklist.count_documents({"user": {"id": str(message.author.id)}}):
@@ -63,14 +63,11 @@ class Impersonation(commands.Cog):
         - `content`: The message to send, is optional.
         """
 
-        for role in ctx.author.roles:
-            if role.id not in self.bot.config["Blacklists"]["roles"]:
+        for role in getattr(ctx.author, "roles", []):
+            if role.id not in self.bot.config["Blacklist"]["roles"]:
                 continue
 
-            if not content:
-                break
-
-            return await ctx.message.reply("Whoops, it seems like you have a role that is blacklisted! Sorry, but you cannot use this command!", mention_author=False)
+            return await ctx.message.reply(self.bot.config["Blacklist"]["message"], mention_author=False)
 
         if not content:
             await ctx.message.add_reaction("⏲️")

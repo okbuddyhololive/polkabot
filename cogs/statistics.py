@@ -72,6 +72,12 @@ class Statistics(commands.Cog):
         - `keyword`: The keyword to search for.
         """
 
+        for role in getattr(ctx.author, "roles", []):
+            if role.id not in self.bot.config["Blacklist"]["roles"]:
+                continue
+
+            return await ctx.message.reply(self.bot.config["Blacklist"]["message"], mention_author=False)
+
         await ctx.message.add_reaction("⏲️")
 
         async with ctx.typing():
@@ -153,6 +159,12 @@ class Statistics(commands.Cog):
         - `target`: The user that will be analyzed.
         """
 
+        for role in getattr(ctx.author, "roles", []):
+            if role.id not in self.bot.config["Blacklist"]["roles"]:
+                continue
+
+            return await ctx.message.reply(self.bot.config["Blacklist"]["message"], mention_author=False)
+
         await ctx.message.add_reaction("⏲️")
 
         target = target or ctx.author
@@ -206,6 +218,12 @@ class Statistics(commands.Cog):
         **Arguments:**
         - `target`: The user that will be analyzed.
         """
+
+        for role in getattr(ctx.author, "roles", []):
+            if role.id not in self.bot.config["Blacklist"]["roles"]:
+                continue
+
+            return await ctx.message.reply(self.bot.config["Blacklist"]["message"], mention_author=False)
 
         await ctx.message.add_reaction("⏲️")
 
