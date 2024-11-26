@@ -26,5 +26,4 @@ env.bak/
 *.log
 
 # Project-specific files
-src/assets/
 _ignore/

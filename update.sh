@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 # update the system
 sudo -S apt-get update && sudo apt-get upgrade -y
@@ -9,7 +9,7 @@ cd ~/project-pretender
 # update python packages
 python3 -m pip install -r requirements.txt --upgrade
 
-# pull the latest code
+# pull the latest code from the repository
 git pull origin main
 
 # restart the service
