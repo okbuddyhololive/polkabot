@@ -55,12 +55,6 @@ class Statistics(commands.Cog):
 
         return filtered
 
-    def format_username(self, user: User) -> str:
-        if user.discriminator == "0":
-            return f"@{user.name}"
-
-        return f"{user.name}#{user.discriminator}"
-
     # actual commands
     @commands.command()
     async def count(self, ctx: commands.Context, *, keyword: str):
@@ -106,7 +100,7 @@ class Statistics(commands.Cog):
             colour=Colour.blurple(),
             timestamp=ctx.message.created_at
         )
-        embed.set_footer(text=f"Invoked by {self.format_username(ctx.author)}", icon_url=ctx.author.display_avatar.url)
+        embed.set_footer(text=f"Invoked by @{ctx.author.name}", icon_url=ctx.author.display_avatar.url)
 
         author_encountered = False
         index = 1
@@ -120,7 +114,7 @@ class Statistics(commands.Cog):
             if any(word in user.name.lower() for word in self.censored):
                 continue
 
-            field_name = f"#{index} - {self.format_username(user)}"
+            field_name = f"#{index} - @{user.name}"
 
             if user.id == ctx.author.id:
                 field_name += " (You)"
@@ -143,7 +137,7 @@ class Statistics(commands.Cog):
             count = occurences[str(ctx.author.id)]
 
             embed.add_field(
-                name=f"#{position} - {self.format_username(ctx.author)} (You)",
+                name=f"#{position} - @{ctx.author.name} (You)",
                 value=f"**{count}** uses",
             )
 
@@ -191,7 +185,7 @@ class Statistics(commands.Cog):
             timestamp=ctx.message.created_at
         )
 
-        embed.set_footer(text=f"Invoked by {self.format_username(ctx.author)}", icon_url=ctx.author.display_avatar.url)
+        embed.set_footer(text=f"Invoked by @{ctx.author.name}", icon_url=ctx.author.display_avatar.url)
         embed.set_thumbnail(url=target.display_avatar.url)
 
         index = 1
@@ -251,7 +245,7 @@ class Statistics(commands.Cog):
             timestamp=ctx.message.created_at
         )
 
-        embed.set_footer(text=f"Invoked by {self.format_username(ctx.author)}", icon_url=ctx.author.display_avatar.url)
+        embed.set_footer(text=f"Invoked by @{ctx.author.name}", icon_url=ctx.author.display_avatar.url)
         embed.set_thumbnail(url=target.display_avatar.url)
 
         index = 1

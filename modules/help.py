@@ -1,12 +1,6 @@
 from discord.ext import commands
 from discord import Embed, Colour, User
 
-def format_username(user: User) -> str:
-    if user.discriminator == "0":
-        return f"@{user.name}"
-
-    return f"{user.name}#{user.discriminator}"
-
 class PretenderHelpCommand(commands.MinimalHelpCommand):
     async def send_bot_help(self, mapping: dict):
         ctx = self.context
@@ -25,7 +19,7 @@ class PretenderHelpCommand(commands.MinimalHelpCommand):
 
             embed.description += f"__**{cog.qualified_name if cog is not None else 'Uncategorized'}**__\n{signatures}\n"
 
-        embed.set_footer(text=f"Invoked by @{format_username(ctx.author)}", icon_url=ctx.author.display_avatar.url)
+        embed.set_footer(text=f"Invoked by @{ctx.author.name}", icon_url=ctx.author.display_avatar.url)
         embed.timestamp = ctx.message.created_at
 
         await ctx.message.reply(embed=embed, mention_author=False)
@@ -45,7 +39,7 @@ class PretenderHelpCommand(commands.MinimalHelpCommand):
         for command in cog.get_commands():
             embed.description += f"`{self.get_command_signature(command)}`\n"
 
-        embed.set_footer(text=f"Invoked by {format_username(ctx.author)}", icon_url=ctx.author.display_avatar.url)
+        embed.set_footer(text=f"Invoked by @{ctx.author.name}", icon_url=ctx.author.display_avatar.url)
         embed.timestamp = ctx.message.created_at
 
         await ctx.message.reply(embed=embed, mention_author=False)
@@ -59,7 +53,7 @@ class PretenderHelpCommand(commands.MinimalHelpCommand):
             colour=Colour.blurple()
         )
 
-        embed.set_footer(text=f"Invoked by {format_username(ctx.author)}", icon_url=ctx.author.display_avatar.url)
+        embed.set_footer(text=f"Invoked by @{ctx.author.name}", icon_url=ctx.author.display_avatar.url)
         embed.timestamp = ctx.message.created_at
 
         await ctx.message.reply(embed=embed, mention_author=False)
@@ -72,7 +66,7 @@ class PretenderHelpCommand(commands.MinimalHelpCommand):
             colour=Colour.red()
         )
 
-        embed.set_footer(text=f"Invoked by {format_username(ctx.author)}", icon_url=ctx.author.display_avatar.url)
+        embed.set_footer(text=f"Invoked by @{ctx.author.name}", icon_url=ctx.author.display_avatar.url)
         embed.timestamp = ctx.message.created_at
 
         return embed
