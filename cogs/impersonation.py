@@ -137,6 +137,10 @@ class Impersonation(commands.Cog):
         await webhook.send(embed=embed, avatar_url=ctx.author.display_avatar.url, username=ctx.author.name)
         await session.close()
 
+    @commands.command()
+    async def delwebhook(self, ctx: commands.Context):
+        await WebhookManager.remove(self.webhooks, ctx.channel)
+
 def setup(bot: commands.Bot):
     bot.add_cog(Impersonation(bot=bot,
         messages=MessageManager(bot.database, **bot.config["Chain"]), 
