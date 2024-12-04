@@ -1,7 +1,7 @@
 from typing import Optional
 
 from aiohttp import ClientSession
-from discord import Webhook, TextChannel
+from discord import TextChannel, Webhook
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
 class WebhookManager:

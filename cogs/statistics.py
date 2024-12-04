@@ -1,9 +1,8 @@
-from discord.ext import commands
-from discord import Embed, Colour
-from discord import User
-
-from typing import Optional, List
 import re
+from typing import List, Optional
+
+from discord import Colour, Embed, User
+from discord.ext import commands
 
 from modules.chain import MessageManager
 

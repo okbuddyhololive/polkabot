@@ -4,7 +4,7 @@ A Discord bot impersonating users via webhooks, based on their messages. Origina
 It uses webhooks to send message to a channel with a custom username and avatar (although, the *[BOT]* tag is still visible next to the name) and it uses [Markov chains](https://en.wikipedia.org/wiki/Markov_chain) to generate messages.
 
 ## Running
-Before running the bot, make sure you are running Python 3.8 or later.
+Before running the bot, make sure you are running Python 3.11 or later.
 You can download the latest version of Python from [Python.org](https://www.python.org/downloads).
 
 The bot also requires the **Message Content Intent**, as well as the **Server Members Intent**.

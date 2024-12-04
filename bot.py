@@ -1,14 +1,14 @@
-from discord.ext import commands
-from discord import Intents
-import motor.motor_asyncio as motor
-import dotenv
-import tomli
-
 import logging
 import os
+import tomllib
 
-from modules.help import PretenderHelpCommand
+import dotenv
+import motor.motor_asyncio as motor
+from discord import Intents
+from discord.ext import commands
+
 from modules.cooldown import apply_cooldowns
+from modules.help import PretenderHelpCommand
 
 # load the environment file 
 dotenv.load_dotenv()
@@ -27,7 +27,7 @@ logging.basicConfig(
 
 # load the config file
 with open("config.toml", "rb") as file:
-    config = tomli.load(file)
+    config = tomllib.load(file)
 
 # create the bot object
 intents = Intents.default()

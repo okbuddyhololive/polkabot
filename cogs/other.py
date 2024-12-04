@@ -1,10 +1,10 @@
-from motor.motor_asyncio import AsyncIOMotorCollection
-from discord.ext import commands, tasks
-from discord import Message
-import aiohttp
-
 import logging
 import random
+
+import aiohttp
+from discord import Message
+from discord.ext import commands, tasks
+from motor.motor_asyncio import AsyncIOMotorCollection
 
 from modules.chain import MessageManager
 
@@ -140,7 +140,7 @@ class Other(commands.Cog):
             await ctx.message.reply("https://cdn.discordapp.com/attachments/963524275929747460/1121226843446587402/fe3.png", mention_author=True)
 
 def setup(bot: commands.Bot):
-    bot.add_cog(Other(bot, 
+    bot.add_cog(Other(bot=bot, 
         messages=MessageManager(bot.database, **bot.config["Chain"]),
         blacklist=bot.database.bannedLinks
     ))

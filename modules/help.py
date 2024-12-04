@@ -1,5 +1,5 @@
+from discord import Colour, Embed
 from discord.ext import commands
-from discord import Embed, Colour, User
 
 class PretenderHelpCommand(commands.MinimalHelpCommand):
     async def send_bot_help(self, mapping: dict):

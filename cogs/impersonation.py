@@ -1,10 +1,9 @@
-from discord import Message, User, Embed, Colour, NotFound
-from discord.ext import commands
-
-from motor.motor_asyncio import AsyncIOMotorCollection
-import aiohttp
-
 from typing import Optional
+
+import aiohttp
+from discord import Colour, Embed, Message, NotFound, User
+from discord.ext import commands
+from motor.motor_asyncio import AsyncIOMotorCollection
 
 from modules.chain import MessageManager
 from modules.webhooks import WebhookManager

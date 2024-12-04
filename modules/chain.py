@@ -1,9 +1,9 @@
-from discord import Message, Member, User
-from motor.motor_asyncio import AsyncIOMotorDatabase
-import markovify
-
-from typing import Dict, List, Union
 import re
+from typing import Dict, List, Union
+
+import markovify
+from discord import Member, Message, User
+from motor.motor_asyncio import AsyncIOMotorDatabase
 
 class MessageManager:
     def __init__(self, database: AsyncIOMotorDatabase, min_limit: int = 1_000, max_limit: int = 25_000, length: int = 200, tries: int = 100):

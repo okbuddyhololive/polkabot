@@ -1,9 +1,9 @@
-from discord.ext import commands
-from discord import File
-
-from io import StringIO
-import traceback
 import logging
+import traceback
+from io import StringIO
+
+from discord import File
+from discord.ext import commands
 
 from modules.cooldown import is_whitelisted
 
