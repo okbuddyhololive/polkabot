@@ -1,4 +1,4 @@
-from __future__ import annotations
+from typing import Optional
 
 from aiohttp import ClientSession
 from discord import Webhook, TextChannel
@@ -9,11 +9,11 @@ class WebhookManager:
         self.collection = database.webhooks
 
     # methods for interacting with a specific webhook in a collection
-    async def get(self, channel: TextChannel, session: ClientSession) -> Webhook:
+    async def get(self, channel: TextChannel, session: ClientSession) -> Optional[Webhook]:
         webhook = await self.collection.find_one({"channel": {"id": str(channel.id)}})
 
         if webhook is None:
-            return await self.create(channel)
+            return
 
         return Webhook.partial(id=int(webhook.get("id")), token=webhook.get("token"), session=session)
 
@@ -29,4 +29,4 @@ class WebhookManager:
         return webhook
 
     async def remove(self, channel: TextChannel):
-        return await self.collection.delete_one({"channel": {"id": str(channel.id)}})
+        await self.collection.delete_one({"channel": {"id": str(channel.id)}})

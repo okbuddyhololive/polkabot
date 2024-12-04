@@ -1,5 +1,4 @@
-from discord import Message, User
-from discord import Embed, Colour
+from discord import Message, User, Embed, Colour, NotFound
 from discord.ext import commands
 
 from motor.motor_asyncio import AsyncIOMotorCollection
@@ -79,6 +78,9 @@ class Impersonation(commands.Cog):
 
         webhook = await self.webhooks.get(ctx.channel, session=session)
 
+        if not webhook:
+            webhook = await self.webhooks.create(ctx.channel)
+
         if not content:
             await ctx.message.remove_reaction("⏲️", ctx.me)
 
@@ -106,6 +108,9 @@ class Impersonation(commands.Cog):
         session = aiohttp.ClientSession()
         webhook = await self.webhooks.get(ctx.channel, session=session)
 
+        if not webhook:
+            webhook = await self.webhooks.create(ctx.channel)
+
         message = self.bot.config["Commands"]["Fakekick"]["content"]
         message = message.format(user=victim)
 
@@ -126,6 +131,9 @@ class Impersonation(commands.Cog):
         session = aiohttp.ClientSession()
         webhook = await self.webhooks.get(ctx.channel, session=session)
 
+        if not webhook:
+            webhook = await self.webhooks.create(ctx.channel)
+
         message = self.bot.config["Commands"]["Gold"]["content"]
         message = message.format(guild=ctx.guild)
 
@@ -137,9 +145,32 @@ class Impersonation(commands.Cog):
         await webhook.send(embed=embed, avatar_url=ctx.author.display_avatar.url, username=ctx.author.name)
         await session.close()
 
-    @commands.command()
-    async def delwebhook(self, ctx: commands.Context):
-        await WebhookManager.remove(self.webhooks, ctx.channel)
+    @commands.command(aliases=["delwebhook"])
+    @commands.is_owner()
+    async def delhook(self, ctx: commands.Context):
+        """
+        Deletes a webhook made by the bot inside the channel where the command is being executed.
+        Only available to the bot owners.
+
+        **Arguments:**
+        None.
+        """
+
+        session = aiohttp.ClientSession()
+        webhook = await self.webhooks.get(ctx.channel, session=session)
+
+        if not webhook:
+            return await ctx.message.reply("There is no webhook in this channel.")
+
+        try:
+            await webhook.delete()
+        except NotFound:
+            pass
+
+        await self.webhooks.remove(ctx.channel)
+
+        await ctx.message.reply("Webhook deleted successfully.")
+        await session.close()
 
 def setup(bot: commands.Bot):
     bot.add_cog(Impersonation(bot=bot,
