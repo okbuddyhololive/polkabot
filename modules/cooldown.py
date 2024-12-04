@@ -4,7 +4,7 @@ from discord import utils
 from discord.ext.commands import BucketType, Command, Context
 from discord.ext.commands import cooldown as cooldown_decorator
 
-def apply_cooldowns(cooldowns: dict, commands: Set[Command]):
+def apply_cooldowns(cooldowns: dict, commands: Set[Command]) -> None:
     for name, value in cooldowns.items():
         cooldown_decorator(rate=1, per=value, type=BucketType.channel)(utils.get(commands, name=name))
 

@@ -7,7 +7,7 @@ from discord.ext import commands
 from modules.chain import MessageManager
 
 class Statistics(commands.Cog):
-    def __init__(self, bot: commands.Bot, messages: MessageManager):
+    def __init__(self, bot: commands.Bot, messages: MessageManager) -> None:
         self.bot = bot
         self.messages = messages
 

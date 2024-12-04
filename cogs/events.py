@@ -8,7 +8,7 @@ from discord.ext import commands
 from modules.cooldown import is_whitelisted
 
 class Events(commands.Cog):
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
     @commands.Cog.listener()

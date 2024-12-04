@@ -5,7 +5,7 @@ from discord import TextChannel, Webhook
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
 class WebhookManager:
-    def __init__(self, database: AsyncIOMotorDatabase):
+    def __init__(self, database: AsyncIOMotorDatabase) -> None:
         self.collection = database.webhooks
 
     # methods for interacting with a specific webhook in a collection
@@ -28,5 +28,5 @@ class WebhookManager:
 
         return webhook
 
-    async def remove(self, channel: TextChannel):
+    async def remove(self, channel: TextChannel) -> None:
         await self.collection.delete_one({"channel": {"id": str(channel.id)}})

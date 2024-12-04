@@ -4,7 +4,7 @@ from motor.motor_asyncio import AsyncIOMotorCollection
 from modules.chain import MessageManager
 
 class Opting(commands.Cog):
-    def __init__(self, bot: commands.Bot, messages: MessageManager, blacklist: AsyncIOMotorCollection):
+    def __init__(self, bot: commands.Bot, messages: MessageManager, blacklist: AsyncIOMotorCollection) -> None:
         self.bot = bot
 
         self.messages = messages

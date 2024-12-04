@@ -9,7 +9,7 @@ from modules.chain import MessageManager
 from modules.webhooks import WebhookManager
 
 class Impersonation(commands.Cog):
-    def __init__(self, bot: commands.Bot, messages: MessageManager, webhooks: WebhookManager, blacklist: AsyncIOMotorCollection):
+    def __init__(self, bot: commands.Bot, messages: MessageManager, webhooks: WebhookManager, blacklist: AsyncIOMotorCollection) -> None:
         self.bot = bot
 
         self.messages = messages

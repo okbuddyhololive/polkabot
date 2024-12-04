@@ -6,7 +6,7 @@ from discord import Member, Message, User
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
 class MessageManager:
-    def __init__(self, database: AsyncIOMotorDatabase, min_limit: int = 1_000, max_limit: int = 25_000, length: int = 200, tries: int = 100):
+    def __init__(self, database: AsyncIOMotorDatabase, min_limit: int = 1_000, max_limit: int = 25_000, length: int = 200, tries: int = 100) -> None:
         self.collection = database.messages
 
         self.min_limit = min_limit

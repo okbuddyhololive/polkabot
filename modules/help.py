@@ -2,7 +2,7 @@ from discord import Colour, Embed
 from discord.ext import commands
 
 class PretenderHelpCommand(commands.MinimalHelpCommand):
-    async def send_bot_help(self, mapping: dict):
+    async def send_bot_help(self, mapping: dict) -> None:
         ctx = self.context
 
         embed = Embed(colour=Colour.blurple())
@@ -24,7 +24,7 @@ class PretenderHelpCommand(commands.MinimalHelpCommand):
 
         await ctx.message.reply(embed=embed, mention_author=False)
 
-    async def send_cog_help(self, cog: commands.Cog):
+    async def send_cog_help(self, cog: commands.Cog) -> None:
         ctx = self.context
 
         embed = Embed(colour=Colour.blurple())
@@ -44,7 +44,7 @@ class PretenderHelpCommand(commands.MinimalHelpCommand):
 
         await ctx.message.reply(embed=embed, mention_author=False)
 
-    async def send_command_help(self, command: commands.Command):
+    async def send_command_help(self, command: commands.Command) -> None:
         ctx = self.context
 
         embed = Embed(
@@ -71,5 +71,5 @@ class PretenderHelpCommand(commands.MinimalHelpCommand):
 
         return embed
 
-    async def send_error_message(self, error: Embed):
+    async def send_error_message(self, error: Embed) -> None:
         await self.context.message.reply(embed=error, mention_author=False)
