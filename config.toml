@@ -58,4 +58,4 @@ message = "Whoops, it seems like you have a role that is blacklisted! Sorry, but
     [Cooldowns.Whitelist]
     users = [] # a list of user IDs excluded from the cooldowns
     roles = [] # a list of role IDs excluded from the cooldowns
-    channels = [1019203438330007583] # a list of channel IDs excluded from the cooldowns
+    channels = [1313950286959611964] # a list of channel IDs excluded from the cooldowns

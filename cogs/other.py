@@ -78,11 +78,12 @@ class Other(commands.Cog):
             while True:
                 link = random.choice(self.images)
 
-                async with session.head(link) as response:
-                    if response.status >= 400:
-                        continue
-                    else:
-                        break
+                try:
+                    async with session.head(link, allow_redirects=True) as response:
+                        if response.status < 400:
+                            break
+                except aiohttp.ClientConnectorError:
+                    pass
 
             await session.close()
 
@@ -113,11 +114,12 @@ class Other(commands.Cog):
             while True:
                 link = random.choice(self.videos)
 
-                async with session.head(link) as response:
-                    if response.status >= 400:
-                        continue
-                    else:
-                        break
+                try:
+                    async with session.head(link, allow_redirects=True) as response:
+                        if response.status < 400:
+                            break
+                except aiohttp.ClientConnectorError:
+                    pass
 
             await session.close()
 
