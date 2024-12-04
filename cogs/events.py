@@ -30,7 +30,7 @@ class Events(commands.Cog):
             return await ctx.send(f"Oops, you didn't type the command correctly, {ctx.author.mention}.\nUse `{ctx.prefix}help {ctx.command.name}` for more information.")
 
         if isinstance(error, commands.NotOwner):
-            return
+            return await ctx.send(f"This command is available only to the bot owners, {ctx.author.mention}.")
 
         exception = traceback.format_exception(type(error), error, error.__traceback__)
 
