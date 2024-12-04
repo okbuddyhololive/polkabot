@@ -24,9 +24,23 @@ message = "Whoops, it seems like you have a role that is blacklisted! Sorry, but
     blacklist_path = "assets/blacklist.txt" # path to the file with censored words
     stopwords_path = "assets/stopwords.txt" # path to the file with words that will not be counted
 
-    [Commands.Other] # settings for the other commands
+    [Commands.Other] # settings for other commands
     image_extensions = ["png", "jpg", "jpeg", "webp", "gif"] # a list of image extensions for the `pol image` command
     video_extensions = ["mp4", "mov", "mkv", "webm"] # a list of video extensions for the `pol video` command
+    pol_pot_images = [ # a list of URLs for the `pol pot` command
+        "https://media.discordapp.net/attachments/1313950286959611964/1313953840751710308/pol_pot1.jpg",
+        "https://media.discordapp.net/attachments/1313950286959611964/1313953841091317770/pol_pot2.jpg",
+        "https://media.discordapp.net/attachments/1313950286959611964/1313953841359618099/pol_pot3.jpg",
+        "https://media.discordapp.net/attachments/1313950286959611964/1313953842010001428/pol_pot4.png",
+        "https://media.discordapp.net/attachments/1313950286959611964/1313953842357997728/pol_pot5.png"
+    ]
+    pol_and_images = [ # a list of URLs for the `pol and` command
+        "https://tenor.com/view/poland-pl-poland-flag-flag-polish-flag-gif-10342714656137481402",
+        "https://tenor.com/view/alaynakitty-raeswae-miss-kitty-gif-2893353329644797506",
+        "https://tenor.com/view/scream-love-poland-gif-10918710646251769391",
+        "https://tenor.com/view/azumanga-daioh-tomo-takino-tomo-azumanga-poland-polish-gif-14047841104490219772",
+        "https://tenor.com/view/poland-fajen-polska-gurom-dancing-gif-16498246"
+    ]
 
 [Cooldowns]
     [Cooldowns.Durations] # the key is the command name, the value is the number of seconds between the specific command execution for a user

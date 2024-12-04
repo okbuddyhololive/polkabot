@@ -29,13 +29,13 @@ class Other(commands.Cog):
 
         if not message.reference or not message.reference.resolved:
             return
-        
+
         reply = message.reference.resolved
         prefix = self.bot.config["prefix"]
 
         if reply.content not in (prefix + "image", prefix + "video"):
             return
-        
+
         await self.blacklist.insert_one({"url": message.content})
 
     @tasks.loop(hours=1)
@@ -124,10 +124,10 @@ class Other(commands.Cog):
         #await ctx.message.reply(f"Here's a random video for you! {link}\nIf it's not showing up an embed, it's most likely because it isn't available anymore.", mention_author=False)
         await ctx.message.reply(link, mention_author=False)
 
-    @commands.command()
+    @commands.command(hidden=True)
     async def pot(self, ctx: commands.Context):
         """
-        Sends an image of the leader of the Khmer Rouge.
+        Sends an image related to the Khmer Rouge.
         Meant to be invoked as an accident, when someone is talking about the history of Cambodia in the 70s.
 
         **Arguments:**
@@ -135,9 +135,21 @@ class Other(commands.Cog):
         """
 
         if random.randint(1, 100) <= 1:
-            await ctx.message.reply("https://cdn.discordapp.com/attachments/963524275929747460/1125083804990701578/pot-stainless-steel.png", mention_author=True)
-        else:
-            await ctx.message.reply("https://cdn.discordapp.com/attachments/963524275929747460/1121226843446587402/fe3.png", mention_author=True)
+            return await ctx.message.reply("https://cdn.discordapp.com/attachments/1313950286959611964/1313951187799900244/pot.jpg", mention_author=True)
+
+        await ctx.message.reply(random.choice(self.bot.config["Commands"]["Other"]["pol_pot_images"]), mention_author=True)
+
+    @commands.command("and", hidden=True)
+    async def _and(self, ctx: commands.Context):
+        """
+        Sends a GIF related to Poland in a patriotic way.
+        Meant to be invoked as an accident, when someone mistakenly adds a space between "pol" and "and".
+
+        **Arguments:**
+        None.
+        """
+
+        await ctx.message.reply(random.choice(self.bot.config["Commands"]["Other"]["pol_and_images"]), mention_author=True)
 
 def setup(bot: commands.Bot):
     bot.add_cog(Other(bot=bot, 

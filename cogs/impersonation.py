@@ -144,7 +144,7 @@ class Impersonation(commands.Cog):
         await webhook.send(embed=embed, avatar_url=ctx.author.display_avatar.url, username=ctx.author.name)
         await session.close()
 
-    @commands.command(aliases=["delwebhook"])
+    @commands.command(hidden=True, aliases=["delwebhook"])
     @commands.is_owner()
     async def delhook(self, ctx: commands.Context):
         """

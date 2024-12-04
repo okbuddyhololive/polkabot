@@ -13,7 +13,7 @@ class Statistics(commands.Cog):
 
         with open(self.bot.config["Commands"]["User"]["stopwords_path"], "r", encoding="utf-8") as file:
             self.stopwords = [word.rstrip("\n") for word in file.readlines()]
-        
+
         with open(self.bot.config["Commands"]["User"]["blacklist_path"], "r", encoding="utf-8") as file:
             self.censored = [word.rstrip("\n") for word in file.readlines()]
 
@@ -46,7 +46,7 @@ class Statistics(commands.Cog):
         for word in words:
             if self.pattern.match(word):
                 continue
-            
+
             word = self.remove_punctuation(word)
 
             if word:
@@ -81,7 +81,7 @@ class Statistics(commands.Cog):
 
         for message in messages:
             text = message.get("content")
-            
+
             text = text.lower()
             author = message["author"]["id"]
 

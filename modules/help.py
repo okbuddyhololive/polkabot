@@ -12,7 +12,7 @@ class PretenderHelpCommand(commands.MinimalHelpCommand):
         )
 
         for cog, commands in mapping.items():
-            signatures = " ".join(command.name for command in commands)
+            signatures = " ".join(command.name for command in commands if not command.hidden)
 
             if not signatures:
                 continue
@@ -37,6 +37,9 @@ class PretenderHelpCommand(commands.MinimalHelpCommand):
         embed.description += f"**{name} Commands**\n"
 
         for command in cog.get_commands():
+            if command.hidden:
+                continue
+
             embed.description += f"`{self.get_command_signature(command)}`\n"
 
         embed.set_footer(text=f"Invoked by @{ctx.author.name}", icon_url=ctx.author.display_avatar.url)
