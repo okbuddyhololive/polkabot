@@ -7,6 +7,7 @@ from discord.ext import commands, tasks
 from motor.motor_asyncio import AsyncIOMotorCollection
 
 from modules.chain import MessageManager
+from modules.cooldown import is_blacklisted
 
 class Other(commands.Cog):
     def __init__(self, bot: commands.Bot, messages: MessageManager, blacklist: AsyncIOMotorCollection) -> None:
@@ -63,10 +64,7 @@ class Other(commands.Cog):
         None.
         """
 
-        for role in getattr(ctx.author, "roles", []):
-            if role.id not in self.bot.config["Blacklist"]["roles"]:
-                continue
-
+        if is_blacklisted(ctx, self.bot.config["Blacklist"]):
             return await ctx.message.reply(self.bot.config["Blacklist"]["message"], mention_author=False)
 
         if not self.images:
@@ -99,10 +97,7 @@ class Other(commands.Cog):
         None.
         """
 
-        for role in getattr(ctx.author, "roles", []):
-            if role.id not in self.bot.config["Blacklist"]["roles"]:
-                continue
-
+        if is_blacklisted(ctx, self.bot.config["Blacklist"]):
             return await ctx.message.reply(self.bot.config["Blacklist"]["message"], mention_author=False)
 
         if not self.videos:

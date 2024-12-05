@@ -20,3 +20,10 @@ def is_whitelisted(ctx: Context, whitelists: dict) -> bool:
             return True
 
     return False
+
+def is_blacklisted(ctx: Context, blacklists: dict) -> bool:
+    for role in ctx.author.roles:
+        if role.id in blacklists["roles"]:
+            return True
+
+    return False
