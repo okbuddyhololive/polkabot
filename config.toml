@@ -45,6 +45,7 @@ message = "Whoops, it seems like you have a role that is blacklisted! Sorry, but
 [Cooldowns]
     [Cooldowns.Durations] # the key is the command name, the value is the number of seconds between the specific command execution for a user
     impersonate = 5
+    echo = 5
     fakekick = 5
     gold = 5
 
@@ -54,6 +55,9 @@ message = "Whoops, it seems like you have a role that is blacklisted! Sorry, but
 
     image = 30
     video = 30
+
+    pot = 1
+    and = 1
 
     [Cooldowns.Whitelist]
     users = [] # a list of user IDs excluded from the cooldowns

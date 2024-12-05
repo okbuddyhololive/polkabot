@@ -64,27 +64,57 @@ class Impersonation(commands.Cog):
 
         if is_blacklisted(ctx, self.bot.config["Blacklist"]):
             return await ctx.message.reply(self.bot.config["Blacklist"]["message"], mention_author=False)
-
-        if not content:
+        else:
             await ctx.message.add_reaction("⏲️")
 
         session = aiohttp.ClientSession()
-
-        victim = victim or ctx.author
-        message = content or await self.messages.generate(victim)
-
         webhook = await self.webhooks.get(ctx.channel, session=session)
 
-        if not webhook:
-            webhook = await self.webhooks.create(ctx.channel)
+        victim = victim or ctx.author        
 
         if not content:
-            await ctx.message.remove_reaction("⏲️", ctx.me)
+            dataset = await self.messages.get(victim)
 
+            if not dataset or len(dataset) < self.messages.min_limit:
+                dataset = await self.messages.default()
+
+            message = await self.messages.generate(dataset)
+        else:
+            message = content
+
+        await ctx.message.remove_reaction("⏲️", ctx.me)
         await ctx.message.delete()
 
         await webhook.send(self.censor_bad_words(message), username=victim.display_name, avatar_url=victim.display_avatar.url)
         await session.close()
+
+    @commands.command()
+    async def echo(self, ctx: commands.Context, *, text: str):
+        """
+        Generates a message containing the specified text by the invoker, based on the messages from the database.
+
+        **Arguments:**
+        - `text`: The text that the generated message will contain.
+        """
+
+        if is_blacklisted(ctx, self.bot.config["Blacklist"]):
+            return await ctx.message.reply(self.bot.config["Blacklist"]["message"], mention_author=False)
+        else:
+            await ctx.message.add_reaction("⏲️")
+
+        dataset = await self.messages.containing(text)
+
+        if not dataset or len(dataset) < self.messages.min_limit:
+            return await ctx.message.reply("I couldn't find any messages containing that text.", mention_author=False)
+
+        while True:
+            message = await self.messages.generate(dataset)
+
+            if text in message:
+                break
+
+        await ctx.message.remove_reaction("⏲️", ctx.me)
+        await ctx.message.reply(self.censor_bad_words(message), mention_author=False)
 
     @commands.command(aliases=["leave", "bye"])
     async def fakekick(self, ctx: commands.Context, victim: Optional[User] = None):

@@ -5,6 +5,7 @@ from discord import Colour, Embed, User
 from discord.ext import commands
 
 from modules.chain import MessageManager
+from modules.cooldown import is_blacklisted
 
 class Statistics(commands.Cog):
     def __init__(self, bot: commands.Bot, messages: MessageManager) -> None:
@@ -65,16 +66,12 @@ class Statistics(commands.Cog):
         - `keyword`: The keyword to search for.
         """
 
-        for role in getattr(ctx.author, "roles", []):
-            if role.id not in self.bot.config["Blacklist"]["roles"]:
-                continue
-
+        if is_blacklisted(ctx, self.bot.config["Blacklist"]):
             return await ctx.message.reply(self.bot.config["Blacklist"]["message"], mention_author=False)
+        else:
+            await ctx.message.add_reaction("⏲️")
 
-        await ctx.message.add_reaction("⏲️")
-
-        async with ctx.typing():
-            messages = await self.messages.containing(keyword)
+        messages = await self.messages.containing(keyword)
 
         keyword = keyword.lower()
         occurences = {}
@@ -152,19 +149,15 @@ class Statistics(commands.Cog):
         - `target`: The user that will be analyzed.
         """
 
-        for role in getattr(ctx.author, "roles", []):
-            if role.id not in self.bot.config["Blacklist"]["roles"]:
-                continue
-
+        if is_blacklisted(ctx, self.bot.config["Blacklist"]):
             return await ctx.message.reply(self.bot.config["Blacklist"]["message"], mention_author=False)
-
-        await ctx.message.add_reaction("⏲️")
+        else:
+            await ctx.message.add_reaction("⏲️")
 
         target = target or ctx.author
         occurences = {}
 
-        async with ctx.typing():
-            messages = await self.messages.get(target)
+        messages = await self.messages.get(target)
 
         for message in messages:
             for word in self.word_split(message.get("content")):
@@ -212,19 +205,15 @@ class Statistics(commands.Cog):
         - `target`: The user that will be analyzed.
         """
 
-        for role in getattr(ctx.author, "roles", []):
-            if role.id not in self.bot.config["Blacklist"]["roles"]:
-                continue
-
+        if is_blacklisted(ctx, self.bot.config["Blacklist"]):
             return await ctx.message.reply(self.bot.config["Blacklist"]["message"], mention_author=False)
-
-        await ctx.message.add_reaction("⏲️")
+        else:
+            await ctx.message.add_reaction("⏲️")
 
         target = target or ctx.author
         occurences = {}
 
-        async with ctx.typing():
-            messages = await self.messages.get(target)
+        messages = await self.messages.get(target)
 
         for message in messages:
             for word in self.word_split(message.get("content", "")):

@@ -46,9 +46,7 @@ class MessageManager:
         return await cursor.to_list(length=None)
 
     async def containing(self, keyword: str) -> List[Dict]:
-        pattern = re.escape(keyword)
-        pattern = re.compile(pattern, re.IGNORECASE)
-
+        pattern = re.compile(re.escape(keyword), re.IGNORECASE)
         cursor = self.collection.find({"content": pattern})
 
         return await cursor.to_list(length=None)
@@ -67,12 +65,7 @@ class MessageManager:
     async def remove(self, author: Union[Member, User]) -> None:
         await self.collection.delete_many({"author": {"id": str(author.id)}})
 
-    async def generate(self, author: Union[Member, User]) -> str:
-        dataset = await self.get(author)
-
-        if not dataset or len(dataset) < self.min_limit:
-            dataset = await self.default()
-
+    async def generate(self, dataset: List[Dict]) -> str:
         dataset = [message.get("content") for message in dataset]
         chain = markovify.NewlineText(dataset, well_formed=False)
 
