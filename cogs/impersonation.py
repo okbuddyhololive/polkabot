@@ -28,7 +28,7 @@ class Impersonation(commands.Cog):
             if word not in censored_text:
                 continue
 
-            censored_text = censored_text.replace(word, word[0] + ("*" * (len(word) - 2)) + word[-1])
+            censored_text = censored_text.replace(word, word[0] + ("\\*" * (len(word) - 2)) + word[-1])
 
         return censored_text
 
