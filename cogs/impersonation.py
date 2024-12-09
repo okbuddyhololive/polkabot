@@ -105,10 +105,13 @@ class Impersonation(commands.Cog):
         dataset = await self.messages.containing(text)
 
         if not dataset or len(dataset) < self.messages.min_limit:
-            return await ctx.message.reply("I couldn't find any messages containing that text.", mention_author=False)
+            return await ctx.message.reply("I couldn't find enough messages containing that text.", mention_author=False)
 
         while True:
             message = await self.messages.generate(dataset)
+
+            if not message:
+                return await ctx.message.reply("I couldn't generate a message based on that word.", mention_author=False)
 
             if text in message:
                 break
