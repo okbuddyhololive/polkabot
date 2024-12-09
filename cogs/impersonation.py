@@ -38,7 +38,7 @@ class Impersonation(commands.Cog):
         if message.author.bot:
             return
 
-        if not message.clean_content:
+        if not message.clean_content and not message.attachments:
             return
 
         if message.channel.id in self.bot.config["Blacklist"]["channels"]:

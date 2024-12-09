@@ -28,7 +28,7 @@ class MessageManager:
                     "url": {
                         "$regexFind": {
                             "input": "$content", 
-                            "regex": rf"\bhttps?:\/\/\S+\.(?:{'|'.join(extensions)})\b",
+                            "regex": rf"\bhttps?:\/\/\S+\.(?:{"|".join(extensions)})\S*\b",
                             "options": "i"
                         }
                     }
