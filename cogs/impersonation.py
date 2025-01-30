@@ -70,6 +70,9 @@ class Impersonation(commands.Cog):
         session = aiohttp.ClientSession()
         webhook = await self.webhooks.get(ctx.channel, session=session)
 
+        if not webhook:
+            webhook = await self.webhooks.create(ctx.channel)
+
         victim = victim or ctx.author        
 
         if not content:
