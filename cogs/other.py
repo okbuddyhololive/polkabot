@@ -148,6 +148,10 @@ class Other(commands.Cog):
 
         await ctx.message.reply(random.choice(self.bot.config["Commands"]["Other"]["pol_and_images"]), mention_author=True)
 
+    @commands.command(hidden=True)
+    async def test(self, ctx: commands.Context):
+        raise SyntaxError("Congrats! You found the exception handler test command!")
+
 def setup(bot: commands.Bot):
     bot.add_cog(Other(bot=bot, 
         messages=MessageManager(bot.database, **bot.config["Chain"]),
