@@ -51,11 +51,13 @@ class Impersonation(commands.Cog):
 
     # actual commands here
     @commands.command()
+    @commands.guild_only()
     async def impersonate(self, ctx: commands.Context, victim: Optional[User] = None, *, content: Optional[str] = None):
         """
         Impersonates the invoker (or the person you specify), based on their messages that were collected.
         If the user has opted out of message collecting, it will be based on all messages in the database.
         The invoker can also specify a message to send, which will be used instead of the generated message.
+        Can be used only inside servers.
 
         **Arguments:**
         - `victim`: The user to impersonate, is optional.
@@ -123,10 +125,12 @@ class Impersonation(commands.Cog):
         await ctx.message.reply(self.censor_bad_words(message), mention_author=False)
 
     @commands.command(aliases=["leave", "bye"])
+    @commands.guild_only()
     async def fakekick(self, ctx: commands.Context, victim: Optional[User] = None):
         """
         Impersonates Saiki Koronbot, pretending the invoker (or the person the invoker specifies) has left the server,
         by sending a message into the channel where the command was invoked.
+        Can be used only inside servers.
 
         **Arguments:**
         - `victim`: The targeted user, is optional.
@@ -153,9 +157,11 @@ class Impersonation(commands.Cog):
         await session.close()
 
     @commands.command()
+    @commands.guild_only()
     async def gold(self, ctx: commands.Context):
         """
         Pretends to hide an invoker's message behind a paywall, sending an embed.
+        Can be used only inside servers.
 
         **Arguments:**
         None.

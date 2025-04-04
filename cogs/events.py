@@ -29,11 +29,13 @@ class Events(commands.Cog):
         if isinstance(error, commands.UserInputError):
             return await ctx.send(f"Oops, you didn't type the command correctly, {ctx.author.mention}.\nUse `{ctx.prefix}help {ctx.command.name}` for more information.")
 
+        if isinstance(error, commands.NoPrivateMessage):
+            return await ctx.send(f"This command cannot be used in DMs, {ctx.author.mention}.")
+
         if isinstance(error, commands.NotOwner):
             return await ctx.send(f"This command is available only to the bot owners, {ctx.author.mention}.")
 
         exception = traceback.format_exception(type(error), error, error.__traceback__)
-
         message = (
             "Uh oh, I've ran into an issue while trying to execute this command!\n"
             "Please send the file below to the bot developers via DMs:\n"
