@@ -8,7 +8,7 @@ tries = 100 # amount of tries to generate a message
 
 [Blacklist]
 channels = [854899513642582056] # IDs of channels blocked from fetching messages from them
-roles = [1086894336437919835] # IDs of roles blocked from using the commands
+roles = [1247928066219573300] # IDs of roles blocked from using the commands
 message = "Whoops, it seems like you have a role that is blacklisted! Sorry, but you cannot use this command!" # a message that will be sent to a user if they have a blacklisted role
 
 [Commands]
@@ -44,8 +44,8 @@ message = "Whoops, it seems like you have a role that is blacklisted! Sorry, but
 
 [Cooldowns]
     [Cooldowns.Durations] # the key is the command name, the value is the number of seconds between the specific command execution for a user
-    impersonate = 5
-    echo = 5
+    impersonate = 10
+    echo = 10
     fakekick = 5
     gold = 5
 
