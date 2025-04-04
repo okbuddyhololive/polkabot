@@ -95,14 +95,28 @@ class Other(commands.Cog):
         cursor = self.blacklist.find({})
         banned_links = [document["url"] for document in await cursor.to_list(length=None)]
 
-        image_extensions = self.bot.config["Commands"]["Other"]["image_extensions"]
-        video_extensions = self.bot.config["Commands"]["Other"]["video_extensions"]
+        image_extensions = tuple(self.bot.config["Commands"]["Other"]["image_extensions"])
+        video_extensions = tuple(self.bot.config["Commands"]["Other"]["video_extensions"])
 
-        image_matches = await self.messages.links(image_extensions)
-        video_matches = await self.messages.links(video_extensions)
+        matches = await self.messages.links(image_extensions + video_extensions)
 
-        self.images = [message["url"]["match"] for message in image_matches if message["url"]["match"] not in banned_links]
-        self.videos = [message["url"]["match"] for message in video_matches if message["url"]["match"] not in banned_links]
+        images = []
+        videos = []
+
+        for document in matches:
+            link = document["url"]["match"]
+            clean_link = link.rsplit("?", 1)[0]
+
+            if link in banned_links or clean_link in banned_links:
+                continue
+
+            if clean_link.endswith(image_extensions):
+                images.append(link)
+            elif clean_link.endswith(video_extensions):
+                videos.append(link)
+
+        self.images = images
+        self.videos = videos
 
         logging.info(f"Updated links. Found {len(self.images)} images and {len(self.videos)} videos.")
 
