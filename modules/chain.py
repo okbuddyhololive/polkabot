@@ -27,13 +27,13 @@ class MessageManager:
                 "$project": {
                     "url": {
                         "$regexFind": {
-                            "input": "$content", 
+                            "input": "$content",
                             "regex": rf"\bhttps?:\/\/\S+\.(?:{"|".join(extensions)})\S*\b",
                             "options": "i"
                         }
                     }
                 }
-            }, 
+            },
             {
                 "$match": {
                     "url": {

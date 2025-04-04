@@ -47,7 +47,7 @@ class Opting(commands.Cog):
         await message.add_reaction("✅")
 
         try:
-            await self.bot.wait_for("reaction_add", 
+            await self.bot.wait_for("reaction_add",
                 timeout=60.0,
                 check=lambda reaction, user: user == ctx.author and str(reaction.emoji) == "✅"
             )
@@ -61,6 +61,6 @@ class Opting(commands.Cog):
 
 def setup(bot: commands.Bot):
     bot.add_cog(Opting(bot=bot,
-        messages=MessageManager(bot.database, **bot.config["Chain"]), 
+        messages=MessageManager(bot.database, **bot.config["Chain"]),
         blacklist=bot.database.optOutUsers
     ))

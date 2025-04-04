@@ -10,7 +10,7 @@ from discord.ext import commands
 from modules.cooldown import apply_cooldowns
 from modules.help import PretenderHelpCommand
 
-# load the environment file 
+# load the environment file
 dotenv.load_dotenv()
 
 # set up logging

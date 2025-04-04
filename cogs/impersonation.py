@@ -73,7 +73,7 @@ class Impersonation(commands.Cog):
         if not webhook:
             webhook = await self.webhooks.create(ctx.channel)
 
-        victim = victim or ctx.author        
+        victim = victim or ctx.author
 
         if not content:
             dataset = await self.messages.get(victim)
@@ -155,7 +155,7 @@ class Impersonation(commands.Cog):
     @commands.command()
     async def gold(self, ctx: commands.Context):
         """
-        Pretends to hide an invoker's message behind a paywall, sending an embed. 
+        Pretends to hide an invoker's message behind a paywall, sending an embed.
 
         **Arguments:**
         None.
@@ -207,7 +207,7 @@ class Impersonation(commands.Cog):
 
 def setup(bot: commands.Bot):
     bot.add_cog(Impersonation(bot=bot,
-        messages=MessageManager(bot.database, **bot.config["Chain"]), 
+        messages=MessageManager(bot.database, **bot.config["Chain"]),
         webhooks=WebhookManager(bot.database),
         blacklist=bot.database.blacklist
     ))

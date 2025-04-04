@@ -92,7 +92,7 @@ class Statistics(commands.Cog):
         occurences = dict(sorted(occurences.items(), key=lambda occurence: occurence[1], reverse=True))
 
         embed = Embed(
-            title=f"Top 10 users who've said \"{keyword}\":", 
+            title=f"Top 10 users who've said \"{keyword}\":",
             colour=Colour.blurple(),
             timestamp=ctx.message.created_at
         )
@@ -172,7 +172,7 @@ class Statistics(commands.Cog):
         occurences = dict(sorted(occurences.items(), key=lambda occurence: occurence[1], reverse=True))
 
         embed = Embed(
-            title=f"Top 10 words said the most by {target.display_name}:", 
+            title=f"Top 10 words said the most by {target.display_name}:",
             colour=Colour.blurple(),
             timestamp=ctx.message.created_at
         )
@@ -253,6 +253,6 @@ class Statistics(commands.Cog):
         await ctx.message.reply(embed=embed, mention_author=False)
 
 def setup(bot: commands.Bot):
-    bot.add_cog(Statistics(bot=bot, 
+    bot.add_cog(Statistics(bot=bot,
         messages=MessageManager(bot.database, **bot.config["Chain"])
     ))

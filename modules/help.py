@@ -65,7 +65,7 @@ class PretenderHelpCommand(commands.MinimalHelpCommand):
         ctx = self.context
 
         embed = Embed(
-            description=f"No command/category called `{string}` found!", 
+            description=f"No command/category called `{string}` found!",
             colour=Colour.red()
         )
 
