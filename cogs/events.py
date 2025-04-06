@@ -21,10 +21,11 @@ class Events(commands.Cog):
             return
 
         if isinstance(error, commands.CommandOnCooldown):
-            if is_whitelisted(ctx, self.bot.config["Cooldowns"]["Whitelist"]):
-                return ctx.command.reset_cooldown(ctx)
+            if not is_whitelisted(ctx, self.bot.config["Cooldowns"]["Whitelist"]):
+                return await ctx.send(f"You're on cooldown, {ctx.author.mention}. Please try again in {round(error.retry_after, 2)} seconds.")
 
-            return await ctx.send(f"You're on cooldown, {ctx.author.mention}. Please try again in {round(error.retry_after, 2)} seconds.")
+            ctx.command.reset_cooldown(ctx)
+            return await self.bot.invoke(ctx)
 
         if isinstance(error, commands.UserInputError):
             return await ctx.send(f"Oops, you didn't type the command correctly, {ctx.author.mention}.\nUse `{ctx.prefix}help {ctx.command.name}` for more information.")
