@@ -9,7 +9,7 @@ You can download the latest version of Python from [Python.org](https://www.pyth
 
 The bot also requires the **Message Content Intent**, as well as the **Server Members Intent**.
 
-1. Set up a MongoDB database (use the [installation guides](https://www.mongodb.com/docs/manual/administration/install-community) for help). 
+1. Set up a MongoDB database (use the [installation guides](https://www.mongodb.com/docs/manual/administration/install-community) for help).
     - You can either install it on your host machine, or use a remote MongoDB server, as long as it's accessible from your
 host via a connection URI.
 2. Create an application with a bot on [Discord Developer Portal](https://discord.com/developers/applications), remembering to enable the required intents mentioned above.

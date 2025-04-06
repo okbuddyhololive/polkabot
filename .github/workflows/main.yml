@@ -1,18 +1,17 @@
-name: Deploying the latest version of the bot
+name: Deploy latest changes to VPS
 
-on: 
+on:
   push:
     branches: [main]
-  
+
 jobs:
-  ssh:
-    name: Update on VPS using SSH
+  main:
     runs-on: ubuntu-latest
-  
+
     steps:
-      - name: Run the update script
+      - name: Update dependencies and pull repository
         uses: appleboy/ssh-action@master
-    
+
         with:
           host: ${{ secrets.HOST }}
           port: ${{ secrets.PORT }}
@@ -20,4 +19,15 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
 
-          script: echo ${{ secrets.PASSWORD }} | ./polkabot/update.sh
+          script: |
+            cd polkabot
+
+            echo ${{ secrets.PASSWORD }} | sudo -S apt update
+            sudo apt upgrade -y
+
+            git pull
+
+            source .venv/bin/activate
+            pip install -r requirements.txt --upgrade
+
+            sudo systemctl restart polkabot
