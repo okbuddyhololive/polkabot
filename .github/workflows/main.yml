@@ -23,11 +23,11 @@ jobs:
             cd polkabot
 
             echo ${{ secrets.PASSWORD }} | sudo -S apt update
-            sudo apt upgrade -y
+            echo ${{ secrets.PASSWORD }} | sudo -S apt upgrade -y
 
             git pull
 
             source .venv/bin/activate
             pip install -r requirements.txt --upgrade
 
-            sudo systemctl restart polkabot
+            echo ${{ secrets.PASSWORD }} | sudo systemctl restart polkabot
